@@ -1,31 +1,39 @@
 package com.thotsoft.carpooling.api.model;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
-public class User {
+public class User implements Serializable {
+    public static final String FIELD_ID = "id";
+    public static final String FIELD_NAME = "name";
+    public static final String FIELD_EMAIL = "email";
+    public static final String FIELD_PASSWORD = "password";
+    public static final String FIELD_PHONE_NUMBER = "phoneNumber";
+    public static final String FIELD_ADDRESS = "address";
+    public static final String FIELD_ADMIN = "admin";
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Column(name = FIELD_ID)
     private int id;
 
-    @Column(name = "name", nullable = false)
+    @Column(name = FIELD_NAME, nullable = false)
     private String name;
 
-    @Column(name = "email", nullable = false)
+    @Column(name = FIELD_EMAIL, nullable = false)
     private String email;
 
-    @Column(name = "password", nullable = false)
+    @Column(name = FIELD_PASSWORD, nullable = false)
     private String password;
 
-    @Column(name = "phoneNumber")
+    @Column(name = FIELD_PHONE_NUMBER)
     private String phoneNumber;
 
-    @Column(name = "address")
+    @Column(name = FIELD_ADDRESS)
     private Address address;
 
-    @Column(name = "admin", nullable = false)
+    @Column(name = FIELD_ADMIN, nullable = false)
     private boolean admin;
 
     public int getId() {

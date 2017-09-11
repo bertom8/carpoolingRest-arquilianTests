@@ -4,14 +4,13 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.thotsoft.carpooling</groupId>
-    <artifactId>main</artifactId>
+    <groupId>com.thotsoft</groupId>
+    <artifactId>carpooling</artifactId>
     <packaging>pom</packaging>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0</version>
     <modules>
         <module>api</module>
         <module>war</module>
-        <module>client</module>
     </modules>
 
     <dependencyManagement>
@@ -27,13 +26,6 @@
 
 
     <dependencies>
-
-        <dependency>
-            <groupId>javax</groupId>
-            <artifactId>javaee-api</artifactId>
-            <version>7.0</version>
-            <scope>provided</scope>
-        </dependency>
 
         <dependency>
             <groupId>junit</groupId>

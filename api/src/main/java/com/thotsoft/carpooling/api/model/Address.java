@@ -2,16 +2,22 @@ package com.thotsoft.carpooling.api.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import java.io.Serializable;
 
 @Entity
-public class Address {
-    @Column(name = "zipCode")
+public class Address implements Serializable {
+    public static final String FIELD_ZIPCODE = "zipCode";
+    public static final String FIELD_CITY = "city";
+    public static final String FIELD_STREET = "street";
+    public static final String FIELD_HOUSENUMBER = "houseNumber";
+
+    @Column(name = FIELD_ZIPCODE)
     private int zipCode;
-    @Column(name = "city")
+    @Column(name = FIELD_CITY)
     private String city;
-    @Column(name = "street")
+    @Column(name = FIELD_STREET)
     private String street;
-    @Column(name = "houseNumber")
+    @Column(name = FIELD_HOUSENUMBER)
     private String houseNumber;
 
     public int getZipCode() {

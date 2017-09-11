@@ -1,32 +1,41 @@
 package com.thotsoft.carpooling.api.model;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 
 @Entity
-public class Message {
+public class Message implements Serializable {
+    public static final String FIELD_ID = "id";
+    public static final String FIELD_SOURCE = "source";
+    public static final String FIELD_TARGET = "target";
+    public static final String FIELD_TITLE = "title";
+    public static final String FIELD_TEXT = "text";
+    public static final String FIELD_DATE = "date";
+    public static final String FIELD_UNREAD = "unread";
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Column(name = FIELD_ID)
     private int id;
 
-    @Column(name = "source", nullable = false)
+    @Column(name = FIELD_SOURCE, nullable = false)
     private User source;
 
-    @Column(name = "target", nullable = false)
+    @Column(name = FIELD_TARGET, nullable = false)
     private User target;
 
-    @Column(name = "title")
+    @Column(name = FIELD_TITLE)
     private String title;
 
-    @Column(name = "text")
+    @Column(name = FIELD_TEXT)
     private String text;
 
-    @Column(name = "date", nullable = false)
+    @Column(name = FIELD_DATE, nullable = false)
     @Temporal(TemporalType.DATE)
     private Date date;
 
-    @Column(name = "unread", nullable = false)
+    @Column(name = FIELD_UNREAD, nullable = false)
     private boolean unread;
 
     public int getId() {

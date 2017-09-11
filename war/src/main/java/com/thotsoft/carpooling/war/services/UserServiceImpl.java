@@ -1,7 +1,6 @@
 package com.thotsoft.carpooling.war.services;
 
 import com.thotsoft.carpooling.api.UserService;
-import com.thotsoft.carpooling.api.model.Advertisement;
 import com.thotsoft.carpooling.api.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,6 +9,9 @@ import javax.ejb.Remote;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.util.List;
 import java.util.Objects;
 
@@ -63,6 +65,7 @@ public class UserServiceImpl implements UserService {
         User storedUser = getUser(id);
         if (storedUser != null) {
             em.merge(user);
+            logger.info("User updated: {}", user);
         }
     }
 
@@ -73,7 +76,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean isAlreadyRegistered(String email) {
-        //TODO: implement this
-        return false;
+        Objects.requireNonNull(email);
+        CriteriaBuilder builder = em.getCriteriaBuilder();
+        CriteriaQuery<User> criteriaQuery = builder.createQuery(User.class);
+        Root<User> userRoot = criteriaQuery.from(User.class);
+        criteriaQuery.select(userRoot);
+        criteriaQuery.where(builder.equal(userRoot.get(User.FIELD_EMAIL), email));
+        return em.createQuery(criteriaQuery).getSingleResult() != null;
     }
 }

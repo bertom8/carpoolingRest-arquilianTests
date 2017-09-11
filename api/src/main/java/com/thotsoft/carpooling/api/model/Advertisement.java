@@ -1,32 +1,42 @@
 package com.thotsoft.carpooling.api.model;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 
 @Entity
-public class Advertisement {
+public class Advertisement implements Serializable {
+    public static final String FIELD_ID = "id";
+    public static final String FIELD_SEEKING = "seeking";
+    public static final String FIELD_FROMPLACE = "fromPlace";
+    public static final String FIELD_TOPLACE = "toPlace";
+    public static final String FIELD_START = "start";
+    public static final String FIELD_COST = "cost";
+    public static final String FIELD_UPLOADDATE = "uploadDate";
+
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Column(name = FIELD_ID)
     private int id;
 
-    @Column(name = "seeking", nullable = false)
+    @Column(name = FIELD_SEEKING, nullable = false)
     private boolean seeking;
 
-    @Column(name = "fromPlace", nullable = false)
+    @Column(name = FIELD_FROMPLACE, nullable = false)
     private String fromPlace;
 
-    @Column(name = "toPlace", nullable = false)
+    @Column(name = FIELD_TOPLACE, nullable = false)
     private String toPlace;
 
-    @Column(name = "start")
+    @Column(name = FIELD_START)
     @Temporal(TemporalType.DATE)
     private Date start;
 
-    @Column(name = "cost")
+    @Column(name = FIELD_COST)
     private int cost;
 
-    @Column(name = "uploadDate", nullable = false)
+    @Column(name = FIELD_UPLOADDATE, nullable = false)
     @Temporal(TemporalType.DATE)
     private Date uploadDate;
 

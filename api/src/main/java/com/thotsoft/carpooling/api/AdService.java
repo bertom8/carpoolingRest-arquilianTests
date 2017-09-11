@@ -4,7 +4,7 @@ import com.thotsoft.carpooling.api.model.Advertisement;
 
 import java.util.List;
 
-public interface AdService {
+public interface AdService extends CarpoolingService {
 
     void addAdvertisement(Advertisement advertisement);
 

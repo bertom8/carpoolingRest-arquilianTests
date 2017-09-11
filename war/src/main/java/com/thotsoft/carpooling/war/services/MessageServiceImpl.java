@@ -10,7 +10,11 @@ import javax.ejb.Remote;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.util.List;
+import java.util.Objects;
 
 @Stateless
 @Remote(MessageService.class)
@@ -22,36 +26,64 @@ public class MessageServiceImpl implements MessageService {
 
     @Override
     public void addMessage(Message message) {
-
+        Objects.requireNonNull(message);
+        em.persist(message);
+        em.flush();
+        logger.info("Message added: {}", message);
     }
 
     @Override
     public boolean removeMessage(int id) {
-        return false;
+        Message message = getMessage(id);
+        if (message != null) {
+            em.remove(message);
+            logger.info("Message was removed with this id: {}", id);
+            return true;
+        } else {
+            throw new IllegalArgumentException("There was no such item in database: " + id);
+        }
     }
 
     @Override
     public boolean removeMessage(Message message) {
-        return false;
+        if (message != null) {
+            em.remove(message);
+            logger.info("Message was removed with this id: {}", message.getId());
+            return true;
+        } else {
+            throw new IllegalArgumentException("Message was null");
+        }
     }
 
     @Override
     public Message getMessage(int id) {
-        return null;
+        return em.find(Message.class, id);
     }
 
     @Override
     public List<Message> listMessages() {
-        return null;
+        return em.createQuery("from Message", Message.class).getResultList();
     }
 
     @Override
     public List<Message> listMessagesFrom(User fromUser) {
-        return null;
+        Objects.requireNonNull(fromUser);
+        CriteriaBuilder builder = em.getCriteriaBuilder();
+        CriteriaQuery<Message> criteriaQuery = builder.createQuery(Message.class);
+        Root<Message> messageRoot = criteriaQuery.from(Message.class);
+        criteriaQuery.select(messageRoot);
+        criteriaQuery.where(builder.equal(messageRoot.get(Message.FIELD_SOURCE), fromUser));
+        return em.createQuery(criteriaQuery).getResultList();
     }
 
     @Override
     public List<Message> listMessagesTo(User toUser) {
-        return null;
+        Objects.requireNonNull(toUser);
+        CriteriaBuilder builder = em.getCriteriaBuilder();
+        CriteriaQuery<Message> criteriaQuery = builder.createQuery(Message.class);
+        Root<Message> messageRoot = criteriaQuery.from(Message.class);
+        criteriaQuery.select(messageRoot);
+        criteriaQuery.where(builder.equal(messageRoot.get(Message.FIELD_TARGET), toUser));
+        return em.createQuery(criteriaQuery).getResultList();
     }
 }

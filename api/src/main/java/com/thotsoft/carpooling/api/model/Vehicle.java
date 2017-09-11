@@ -3,39 +3,51 @@ package com.thotsoft.carpooling.api.model;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import java.io.Serializable;
 
 @Entity
-public class Vehicle {
+public class Vehicle implements Serializable {
+    public static final String FIELD_LICENCE_NUMBER = "licenceNumber";
+    public static final String FIELD_TYPE = "type";
+    public static final String FIELD_MANUFACTURER = "manufacturer";
+    public static final String FIELD_DESING = "design";
+    public static final String FIELD_COLOR = "color";
+    public static final String FIELD_SMOKING = "smoking";
+    public static final String FIELD_CLIME = "clime";
+    public static final String FIELD_ANIMAL = "animal";
+    public static final String FIELD_ROAD = "road";
+    public static final String FIELD_COMFORT = "comfort";
+
 
     @Id
-    @Column(name = "licenceNumber", nullable = false)
+    @Column(name = FIELD_LICENCE_NUMBER, nullable = false)
     private String licenceNumber;
 
-    @Column(name = "type")
+    @Column(name = FIELD_TYPE)
     private String type;
 
-    @Column(name = "manufacturer")
+    @Column(name = FIELD_MANUFACTURER)
     private String manufacturer;
 
-    @Column(name = "design")
+    @Column(name = FIELD_DESING)
     private String design;
 
-    @Column(name = "color")
+    @Column(name = FIELD_COLOR)
     private String color;
 
-    @Column(name = "smoking", nullable = false)
+    @Column(name = FIELD_SMOKING, nullable = false)
     private boolean smoking;
 
-    @Column(name = "clime", nullable = false)
+    @Column(name = FIELD_CLIME, nullable = false)
     private boolean clime;
 
-    @Column(name = "animal", nullable = false)
+    @Column(name = FIELD_ANIMAL, nullable = false)
     private boolean animal;
 
-    @Column(name = "road", nullable = false)
+    @Column(name = FIELD_ROAD, nullable = false)
     private boolean road;
 
-    @Column(name = "comfort", nullable = false)
+    @Column(name = FIELD_COMFORT, nullable = false)
     private boolean comfort;
 
     public String getLicenceNumber() {

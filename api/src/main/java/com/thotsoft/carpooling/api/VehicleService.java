@@ -4,7 +4,7 @@ import com.thotsoft.carpooling.api.model.Vehicle;
 
 import java.util.List;
 
-public interface VehicleService {
+public interface VehicleService extends CarpoolingService {
 
     void addVehicle(Vehicle vehicle);
 

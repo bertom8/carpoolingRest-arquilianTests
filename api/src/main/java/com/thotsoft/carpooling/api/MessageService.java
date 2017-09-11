@@ -5,7 +5,7 @@ import com.thotsoft.carpooling.api.model.User;
 
 import java.util.List;
 
-public interface MessageService {
+public interface MessageService extends CarpoolingService {
     void addMessage(Message message);
 
     boolean removeMessage(int id);

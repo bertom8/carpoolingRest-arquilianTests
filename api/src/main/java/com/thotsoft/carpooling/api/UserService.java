@@ -4,7 +4,7 @@ import com.thotsoft.carpooling.api.model.User;
 
 import java.util.List;
 
-public interface UserService {
+public interface UserService extends CarpoolingService {
     void addUser(User user);
 
     boolean removeUser(int id);

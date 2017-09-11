@@ -1,7 +1,6 @@
 package com.thotsoft.carpooling.war.services;
 
 import com.thotsoft.carpooling.api.VehicleService;
-import com.thotsoft.carpooling.api.model.User;
 import com.thotsoft.carpooling.api.model.Vehicle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -63,6 +62,7 @@ public class VehicleServiceImpl implements VehicleService {
         Vehicle storedVehicle = getVehicle(licenceNumber);
         if (storedVehicle != null) {
             em.merge(vehicle);
+            logger.info("Vehicle updated: {}", vehicle);
         }
     }
 

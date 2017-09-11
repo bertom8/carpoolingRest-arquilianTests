@@ -44,6 +44,7 @@ public class AdServiceImpl implements AdService {
     public boolean removeAdvertisement(Advertisement advertisement) {
         if (advertisement != null) {
             em.remove(advertisement);
+            logger.info("Advertisement removed: {}", advertisement);
             return true;
         } else {
             throw new IllegalArgumentException("Advertisement was null");
@@ -56,6 +57,7 @@ public class AdServiceImpl implements AdService {
         Advertisement ad = getAdvertisement(id);
         if (ad != null) {
             em.merge(advertisement);
+            logger.info("Advertisement updated: {}", advertisement);
         }
     }
 
