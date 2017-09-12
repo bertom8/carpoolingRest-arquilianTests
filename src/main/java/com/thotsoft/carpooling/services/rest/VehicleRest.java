@@ -14,10 +14,12 @@ public interface VehicleRest {
 
     @DELETE
     @Path("/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
     boolean removeVehicle(@PathParam("licenceNumber")String licenceNumber);
 
     @DELETE
     @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     boolean removeVehicle(Vehicle vehicle);
 
     @GET

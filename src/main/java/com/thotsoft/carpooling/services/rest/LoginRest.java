@@ -1,15 +1,16 @@
 package com.thotsoft.carpooling.services.rest;
 
-import javax.ws.rs.FormParam;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
+import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
 
 @Path("/login")
 public interface LoginRest {
 
-    @POST
-    boolean login(@FormParam("email") String email, @FormParam("password") String password);
+    @GET
+    @Path("/{email}/{password}")
+    @Produces(MediaType.APPLICATION_JSON)
+    boolean login(@PathParam("email") String email, @PathParam("password") String password);
 
+    @DELETE
     void logout();
 }

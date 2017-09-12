@@ -16,10 +16,12 @@ public interface AdRest {
 
     @DELETE
     @Path("/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
     boolean removeAdvertisement(@PathParam("id") int id);
 
     @DELETE
     @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     boolean removeAdvertisement(Advertisement advertisement);
 
     @GET

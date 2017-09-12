@@ -2,10 +2,12 @@ package com.thotsoft.carpooling.services;
 
 import com.thotsoft.carpooling.model.User;
 import com.thotsoft.carpooling.services.rest.LoginRest;
+import com.thotsoft.carpooling.services.rest.UserRest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.ejb.Stateless;
+import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.Context;
 import java.io.UnsupportedEncodingException;
@@ -19,6 +21,9 @@ public class LoginRestImpl implements LoginRest {
     @Context
     HttpServletRequest request;
 
+    @Inject
+    private UserRest userRest;
+
     /**
      *
      * @param email email string
@@ -27,7 +32,7 @@ public class LoginRestImpl implements LoginRest {
      */
     @Override
     public boolean login(String email, String password) {
-        User user = new UserRestImpl().getUserByEmail(email);
+        User user = userRest.getUserByEmail(email);
         if (user != null) {
             if (user.getPassword().equals(hash(password))) {
                 request.getSession(true).setAttribute("user", user);

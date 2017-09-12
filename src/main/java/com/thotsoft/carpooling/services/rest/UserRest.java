@@ -17,10 +17,12 @@ public interface UserRest {
 
     @DELETE
     @Path("/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
     boolean removeUser(@PathParam("id") int id);
 
     @DELETE
     @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     boolean removeUser(User user);
 
     @GET
@@ -46,4 +48,6 @@ public interface UserRest {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     int countUsers(User user);
+
+    User getUserByEmail(String email);
 }

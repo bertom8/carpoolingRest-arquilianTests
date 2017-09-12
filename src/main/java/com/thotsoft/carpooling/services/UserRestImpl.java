@@ -171,7 +171,7 @@ public class UserRestImpl implements UserRest {
      * @param email email string
      * @return User object by email
      */
-    User getUserByEmail(String email) {
+    public User getUserByEmail(String email) {
         Objects.requireNonNull(email);
         CriteriaBuilder builder = em.getCriteriaBuilder();
         CriteriaQuery<User> criteriaQuery = builder.createQuery(User.class);
