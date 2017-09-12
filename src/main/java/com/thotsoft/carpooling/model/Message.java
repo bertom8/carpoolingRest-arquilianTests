@@ -19,10 +19,10 @@ public class Message implements Serializable {
     @Column(name = FIELD_ID)
     private int id;
 
-    @Column(name = FIELD_SOURCE, nullable = false)
+    @OneToOne(optional = false, cascade = CascadeType.ALL)
     private User source;
 
-    @Column(name = FIELD_TARGET, nullable = false)
+    @OneToOne(optional = false, cascade = CascadeType.ALL)
     private User target;
 
     @Column(name = FIELD_TITLE)

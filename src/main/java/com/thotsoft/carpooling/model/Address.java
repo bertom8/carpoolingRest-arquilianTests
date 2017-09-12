@@ -2,6 +2,7 @@ package com.thotsoft.carpooling.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.SecondaryTable;
 import java.io.Serializable;
 
 public class Address implements Serializable {

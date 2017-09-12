@@ -13,6 +13,7 @@ public class Advertisement implements Serializable {
     public static final String FIELD_START = "start";
     public static final String FIELD_COST = "cost";
     public static final String FIELD_UPLOADDATE = "uploadDate";
+    public static final String FIELD_NUM_OF_SEATS = "numOfSeats";
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,6 +22,9 @@ public class Advertisement implements Serializable {
 
     @Column(name = FIELD_SEEKING, nullable = false)
     private boolean seeking;
+
+    @OneToOne(optional = false, cascade = CascadeType.ALL)
+    private User user;
 
     @Column(name = FIELD_FROMPLACE, nullable = false)
     private String fromPlace;
@@ -38,6 +42,12 @@ public class Advertisement implements Serializable {
     @Column(name = FIELD_UPLOADDATE, nullable = false)
     @Temporal(TemporalType.DATE)
     private Date uploadDate;
+
+    @OneToOne
+    private Vehicle vehicle;
+
+    @Column(name = FIELD_NUM_OF_SEATS)
+    private int numOfSeats;
 
     public int getId() {
         return id;
@@ -95,6 +105,30 @@ public class Advertisement implements Serializable {
         this.uploadDate = uploadDate;
     }
 
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Vehicle getVehicle() {
+        return vehicle;
+    }
+
+    public void setVehicle(Vehicle vehicle) {
+        this.vehicle = vehicle;
+    }
+
+    public int getNumOfSeats() {
+        return numOfSeats;
+    }
+
+    public void setNumOfSeats(int numOfSeats) {
+        this.numOfSeats = numOfSeats;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -119,11 +153,14 @@ public class Advertisement implements Serializable {
         return "Advertisement{" +
                 "id=" + id +
                 ", seeking=" + seeking +
+                ", user=" + user +
                 ", fromPlace='" + fromPlace + '\'' +
                 ", toPlace='" + toPlace + '\'' +
                 ", start=" + start +
                 ", cost=" + cost +
                 ", uploadDate=" + uploadDate +
+                ", vehicle=" + vehicle +
+                ", numOfSeats=" + numOfSeats +
                 '}';
     }
 }

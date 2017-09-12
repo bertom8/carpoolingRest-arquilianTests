@@ -1,9 +1,7 @@
-package com.thotsoft.carpooling.services;
-
+package com.thotsoft.carpooling.services.rest;
 
 import com.thotsoft.carpooling.model.Vehicle;
 
-import javax.ejb.Local;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.List;

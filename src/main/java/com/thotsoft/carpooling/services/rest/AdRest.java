@@ -1,8 +1,9 @@
-package com.thotsoft.carpooling.services;
+package com.thotsoft.carpooling.services.rest;
 
 import com.thotsoft.carpooling.model.Advertisement;
+import com.thotsoft.carpooling.model.User;
+import com.thotsoft.carpooling.services.AdOptions;
 
-import javax.ejb.Local;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
@@ -34,5 +35,14 @@ public interface AdRest {
     @GET
     @Path("/list")
     @Produces(MediaType.APPLICATION_JSON)
-    List<Advertisement> listAds();
+    List<Advertisement> listAds(User user);
+
+//    @GET
+//    @Path("/list")
+//    @Produces(MediaType.APPLICATION_JSON)
+//    List<Advertisement> listAds(AdOptions options);
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    int countAds(User user);
 }

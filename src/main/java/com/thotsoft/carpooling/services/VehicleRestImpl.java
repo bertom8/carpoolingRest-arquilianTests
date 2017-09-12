@@ -1,12 +1,15 @@
 package com.thotsoft.carpooling.services;
 
 import com.thotsoft.carpooling.model.Vehicle;
+import com.thotsoft.carpooling.services.rest.VehicleRest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.core.Context;
 import java.util.List;
 import java.util.Objects;
 
@@ -17,6 +20,13 @@ public class VehicleRestImpl implements VehicleRest {
     @PersistenceContext
     private EntityManager em;
 
+    @Context
+    HttpServletRequest request;
+
+    /**
+     *
+     * @param vehicle Vehicle object to insert into DB
+     */
     @Override
     public void addVehicle(Vehicle vehicle) {
         Objects.requireNonNull(vehicle);
@@ -25,6 +35,11 @@ public class VehicleRestImpl implements VehicleRest {
         logger.info("Vehicle added: {}", vehicle);
     }
 
+    /**
+     *
+     * @param licenceNumber licence number of vehicle
+     * @return Was this successfully
+     */
     @Override
     public boolean removeVehicle(String licenceNumber) {
         Vehicle vehicle = getVehicle(licenceNumber);
@@ -37,6 +52,11 @@ public class VehicleRestImpl implements VehicleRest {
         }
     }
 
+    /**
+     *
+     * @param vehicle Vehicle object to remove from DB
+     * @return Was this successfully
+     */
     @Override
     public boolean removeVehicle(Vehicle vehicle) {
         if (vehicle != null) {
@@ -48,11 +68,21 @@ public class VehicleRestImpl implements VehicleRest {
         }
     }
 
+    /**
+     *
+     * @param licenceNumber licence number of vehicle
+     * @return Vehicle object by licenceNumber
+     */
     @Override
     public Vehicle getVehicle(String licenceNumber) {
         return em.find(Vehicle.class, licenceNumber);
     }
 
+    /**
+     *
+     * @param licenceNumber licence number of vehicle
+     * @param vehicle vehicle object by licenceNumber for update DB record to this
+     */
     @Override
     public void updateVehicle(String licenceNumber, Vehicle vehicle) {
         Objects.requireNonNull(vehicle);
@@ -63,6 +93,10 @@ public class VehicleRestImpl implements VehicleRest {
         }
     }
 
+    /**
+     *
+     * @return List of Vehicles of all
+     */
     @Override
     public List<Vehicle> listVehicles() {
         return em.createQuery("from Vehicle", Vehicle.class).getResultList();

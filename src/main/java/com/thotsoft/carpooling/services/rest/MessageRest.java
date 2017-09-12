@@ -1,4 +1,4 @@
-package com.thotsoft.carpooling.services;
+package com.thotsoft.carpooling.services.rest;
 
 import com.thotsoft.carpooling.model.Message;
 import com.thotsoft.carpooling.model.User;

@@ -18,7 +18,6 @@ public class Vehicle implements Serializable {
     public static final String FIELD_ROAD = "road";
     public static final String FIELD_COMFORT = "comfort";
 
-
     @Id
     @Column(name = FIELD_LICENCE_NUMBER, nullable = false)
     private String licenceNumber;
