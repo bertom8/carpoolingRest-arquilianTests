@@ -2,6 +2,7 @@ package com.thotsoft.carpooling.services;
 
 import com.thotsoft.carpooling.model.User;
 import com.thotsoft.carpooling.services.rest.UserRest;
+import org.apache.commons.validator.routines.EmailValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,25 +22,19 @@ import java.util.Objects;
 public class UserRestImpl implements UserRest {
     private static final Logger logger = LoggerFactory.getLogger(UserRestImpl.class);
 
-    @PersistenceContext
-    private EntityManager em;
-
     @Context
     HttpServletRequest request;
 
+    @PersistenceContext
+    private EntityManager em;
+
     /**
-     *
      * @param user User object to insert into DB
      */
     @Override
     public void addUser(User user) {
         Objects.requireNonNull(user);
-        if (!user.getEmail().matches("(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"" +
-                "(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])" +
-                "*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4]" +
-                "[0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:" +
-                "(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\" +
-                "\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])")) {
+        if (!EmailValidator.getInstance().isValid(user.getEmail())) {
             throw new ValidationException("Not valid email");
         }
         user.setPassword(LoginRestImpl.hash(user.getPassword()));
@@ -49,7 +44,6 @@ public class UserRestImpl implements UserRest {
     }
 
     /**
-     *
      * @param id id of user
      * @return Was this successfully
      */
@@ -71,7 +65,6 @@ public class UserRestImpl implements UserRest {
     }
 
     /**
-     *
      * @param user User object to remove from DB
      * @return Was this successfully
      */
@@ -92,7 +85,6 @@ public class UserRestImpl implements UserRest {
     }
 
     /**
-     *
      * @param id id of User
      * @return User object by id argument
      */
@@ -102,8 +94,7 @@ public class UserRestImpl implements UserRest {
     }
 
     /**
-     *
-     * @param id id of User for update
+     * @param id   id of User for update
      * @param user User object by id argument for update to this
      */
     @Override
@@ -117,7 +108,6 @@ public class UserRestImpl implements UserRest {
     }
 
     /**
-     *
      * @return List of Users of all
      */
     @Override
@@ -126,7 +116,6 @@ public class UserRestImpl implements UserRest {
     }
 
     /**
-     *
      * @param email email string
      * @return Exists user with this email
      */
@@ -142,32 +131,14 @@ public class UserRestImpl implements UserRest {
     }
 
     /**
-     *
-     * @param user
      * @return count of Users
      */
-    //TODO: is really needed to give User argument????
     @Override
-    public int countUsers(User user) {
-        if (user == null) {
-            return listUsers().size();
-        } else {
-            CriteriaBuilder builder = em.getCriteriaBuilder();
-            CriteriaQuery<User> criteriaQuery = builder.createQuery(User.class);
-            Root<User> userRoot = criteriaQuery.from(User.class);
-            criteriaQuery.select(userRoot);
-            criteriaQuery.where(builder.equal(userRoot.get(User.FIELD_ID), user.getId()));
-            List<User> list = em.createQuery(criteriaQuery).getResultList();
-            if (!list.isEmpty()) {
-                return list.size();
-            } else {
-                return 0;
-            }
-        }
+    public int countUsers() {
+        return listUsers().size();
     }
 
     /**
-     *
      * @param email email string
      * @return User object by email
      */

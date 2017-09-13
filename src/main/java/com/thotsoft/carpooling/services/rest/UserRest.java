@@ -47,7 +47,7 @@ public interface UserRest {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    int countUsers(User user);
+    int countUsers();
 
     User getUserByEmail(String email);
 }
