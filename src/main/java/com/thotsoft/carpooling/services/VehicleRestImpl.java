@@ -16,23 +16,22 @@ import java.util.Objects;
 @Stateless
 public class VehicleRestImpl implements VehicleRest {
     private static Logger logger = LoggerFactory.getLogger(VehicleRestImpl.class);
-
-    @PersistenceContext
-    private EntityManager em;
-
     @Context
     HttpServletRequest request;
+    @PersistenceContext
+    private EntityManager em;
 
     /**
      *
      * @param vehicle Vehicle object to insert into DB
      */
     @Override
-    public void addVehicle(Vehicle vehicle) {
+    public String addVehicle(Vehicle vehicle) {
         Objects.requireNonNull(vehicle);
         em.persist(vehicle);
         em.flush();
         logger.info("Vehicle added: {}", vehicle);
+        return vehicle.getLicenceNumber();
     }
 
     /**

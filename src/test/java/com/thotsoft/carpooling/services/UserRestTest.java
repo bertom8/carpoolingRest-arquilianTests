@@ -58,7 +58,9 @@ public class UserRestTest {
 
     private static WebArchive deployment() {
         return ShrinkWrap.create(WebArchive.class, "carpooling.war")
-                .addAsLibraries(mavenDependencies());
+                .addAsLibraries(mavenDependencies())
+                .addAsWebInfResource(new File("src/main/webapp/WEB-INF", "jboss-web.xml"))
+                .addAsWebInfResource(new File("src/main/webapp/WEB-INF", "web.xml"));
     }
 
     private static File[] mavenDependencies() {
@@ -90,20 +92,20 @@ public class UserRestTest {
 
     @Test
     @InSequence(1)
-    public void addUser(@ArquillianResteasyResource("carpooling/user") UserRest userRest) throws Exception {
-        user.setAddress(new Address());
-        user.setPassword("123456");
-        user.setAdmin(false);
-        user.setEmail("asd@ert.hu");
-        user.setName("Phil");
-        user.setPhoneNumber("85967485");
+    public void addUser(@ArquillianResteasyResource("") UserRest userRest) throws Exception {
+//        user.setAddress(new Address());
+//        user.setPassword("123456");
+//        user.setAdmin(false);
+//        user.setEmail("asd@ert.hu");
+//        user.setName("Phil");
+//        user.setPhoneNumber("85967485");
         userRest.addUser(user);
         assertTrue(true);
     }
 
     @Test(expected = ValidationException.class)
     @InSequence(6)
-    public void addUserWithInvalidEmail(@ArquillianResteasyResource("carpooling") UserRest userRest) {
+    public void addUserWithInvalidEmail(@ArquillianResteasyResource("") UserRest userRest) {
         User user1 = new User();
         user1.setEmail("asdasd");
         user1.setAddress(new Address());
@@ -116,8 +118,8 @@ public class UserRestTest {
 
     @Test
     @InSequence(8)
-    public void removeUser(@ArquillianResteasyResource("carpooling") UserRest userRest,
-                           @ArquillianResteasyResource("carpooling") LoginRest loginRest) throws Exception {
+    public void removeUser(@ArquillianResteasyResource("") UserRest userRest,
+                           @ArquillianResteasyResource("") LoginRest loginRest) throws Exception {
         admin.setAdmin(true);
         admin.setEmail("valami@valami.com");
         admin.setPhoneNumber("8965748");
@@ -131,25 +133,25 @@ public class UserRestTest {
 
     @Test
     @InSequence(9)
-    public void removeUser1(@ArquillianResteasyResource("carpooling") UserRest userRest) throws Exception {
+    public void removeUser1(@ArquillianResteasyResource("") UserRest userRest) throws Exception {
         fail();
     }
 
     @Test
     @InSequence(2)
-    public void getUser(@ArquillianResteasyResource("carpooling") UserRest userRest) throws Exception {
+    public void getUser(@ArquillianResteasyResource("") UserRest userRest) throws Exception {
         assertEquals(userRest.getUser(user.getId()), user);
     }
 
     @Test
     @InSequence(7)
-    public void updateUser(@ArquillianResteasyResource("carpooling") UserRest userRest) throws Exception {
+    public void updateUser(@ArquillianResteasyResource("") UserRest userRest) throws Exception {
         fail();
     }
 
     @Test
     @InSequence(4)
-    public void listUsers(@ArquillianResteasyResource("carpooling") UserRest userRest) throws Exception {
+    public void listUsers(@ArquillianResteasyResource("") UserRest userRest) throws Exception {
         List<User> storedUsers = userRest.listUsers();
         List<User> users = new ArrayList<>();
         users.add(user);
@@ -158,13 +160,13 @@ public class UserRestTest {
 
     @Test
     @InSequence(3)
-    public void isAlreadyRegistered(@ArquillianResteasyResource("carpooling") UserRest userRest) throws Exception {
+    public void isAlreadyRegistered(@ArquillianResteasyResource("") UserRest userRest) throws Exception {
         assertTrue(userRest.isAlreadyRegistered(user.getEmail()));
     }
 
     @Test
     @InSequence(5)
-    public void countUsers(@ArquillianResteasyResource("carpooling") UserRest userRest) throws Exception {
+    public void countUsers(@ArquillianResteasyResource("") UserRest userRest) throws Exception {
         assertEquals(userRest.countUsers(), 1);
     }
 }

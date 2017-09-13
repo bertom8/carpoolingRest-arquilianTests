@@ -20,23 +20,22 @@ import java.util.Objects;
 @Stateless
 public class MessageRestImpl implements MessageRest {
     private static Logger logger = LoggerFactory.getLogger(MessageRestImpl.class);
-
-    @PersistenceContext
-    private EntityManager em;
-
     @Context
     HttpServletRequest request;
+    @PersistenceContext
+    private EntityManager em;
 
     /**
      *
      * @param message Message object to insert into DB
      */
     @Override
-    public void addMessage(Message message) {
+    public int addMessage(Message message) {
         Objects.requireNonNull(message);
         em.persist(message);
         em.flush();
         logger.info("Message added: {}", message);
+        return message.getId();
     }
 
     /**

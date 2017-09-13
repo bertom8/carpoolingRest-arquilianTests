@@ -10,12 +10,13 @@ import java.util.List;
 public interface VehicleRest {
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
-    void addVehicle(Vehicle vehicle);
+    @Produces(MediaType.APPLICATION_JSON)
+    String addVehicle(Vehicle vehicle);
 
     @DELETE
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    boolean removeVehicle(@PathParam("licenceNumber")String licenceNumber);
+    boolean removeVehicle(@PathParam("licenceNumber") String licenceNumber);
 
     @DELETE
     @Consumes(MediaType.APPLICATION_JSON)
@@ -25,7 +26,7 @@ public interface VehicleRest {
     @GET
     @Path("/{licenceNumber}")
     @Produces(MediaType.APPLICATION_JSON)
-    Vehicle getVehicle(@PathParam("licenceNumber")String licenceNumber);
+    Vehicle getVehicle(@PathParam("licenceNumber") String licenceNumber);
 
     @POST
     @Path("/{id}")

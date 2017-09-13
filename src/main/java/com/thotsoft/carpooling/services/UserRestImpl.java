@@ -32,7 +32,7 @@ public class UserRestImpl implements UserRest {
      * @param user User object to insert into DB
      */
     @Override
-    public void addUser(User user) {
+    public int addUser(User user) {
         Objects.requireNonNull(user);
         if (!EmailValidator.getInstance().isValid(user.getEmail())) {
             throw new ValidationException("Not valid email");
@@ -41,6 +41,7 @@ public class UserRestImpl implements UserRest {
         em.persist(user);
         em.flush();
         logger.info("User added: {}", user);
+        return user.getId();
     }
 
     /**

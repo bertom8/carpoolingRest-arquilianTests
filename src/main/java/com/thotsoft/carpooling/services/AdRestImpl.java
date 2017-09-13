@@ -20,23 +20,22 @@ import java.util.Objects;
 @Stateless
 public class AdRestImpl implements AdRest {
     private static Logger logger = LoggerFactory.getLogger(AdRestImpl.class);
-
-    @PersistenceContext
-    private EntityManager em;
-
     @Context
     HttpServletRequest request;
+    @PersistenceContext
+    private EntityManager em;
 
     /**
      *
      * @param advertisement Advertisement object to insert to DB
      */
     @Override
-    public void addAdvertisement(Advertisement advertisement) {
+    public int addAdvertisement(Advertisement advertisement) {
         Objects.requireNonNull(advertisement);
         em.persist(advertisement);
         em.flush();
         logger.info("Advertisement added: {}", advertisement);
+        return advertisement.getId();
     }
 
     /**

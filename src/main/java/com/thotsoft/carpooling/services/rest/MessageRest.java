@@ -3,7 +3,6 @@ package com.thotsoft.carpooling.services.rest;
 import com.thotsoft.carpooling.model.Message;
 import com.thotsoft.carpooling.model.User;
 
-import javax.ejb.Local;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
@@ -12,7 +11,8 @@ import java.util.List;
 public interface MessageRest {
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
-    void addMessage(Message message);
+    @Produces(MediaType.APPLICATION_JSON)
+    int addMessage(Message message);
 
     @DELETE
     @Path("/{id}")

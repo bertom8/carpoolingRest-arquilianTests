@@ -2,7 +2,6 @@ package com.thotsoft.carpooling.services.rest;
 
 import com.thotsoft.carpooling.model.Advertisement;
 import com.thotsoft.carpooling.model.User;
-import com.thotsoft.carpooling.services.AdOptions;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -12,7 +11,8 @@ import java.util.List;
 public interface AdRest {
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
-    void addAdvertisement(Advertisement advertisement);
+    @Produces(MediaType.APPLICATION_JSON)
+    int addAdvertisement(Advertisement advertisement);
 
     @DELETE
     @Path("/{id}")

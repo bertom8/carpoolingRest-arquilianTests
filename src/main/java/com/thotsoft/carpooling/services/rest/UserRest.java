@@ -2,9 +2,7 @@ package com.thotsoft.carpooling.services.rest;
 
 import com.thotsoft.carpooling.model.User;
 
-import javax.ejb.Local;
 import javax.naming.NamingException;
-import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
@@ -13,7 +11,8 @@ import java.util.List;
 public interface UserRest {
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
-    void addUser(User user);
+    @Produces(MediaType.APPLICATION_JSON)
+    int addUser(User user);
 
     @DELETE
     @Path("/{id}")
@@ -49,5 +48,8 @@ public interface UserRest {
     @Produces(MediaType.APPLICATION_JSON)
     int countUsers();
 
-    User getUserByEmail(String email);
+    @GET
+    @Path("/email/{email}")
+    @Produces(MediaType.APPLICATION_JSON)
+    User getUserByEmail(@PathParam("email") String email);
 }
