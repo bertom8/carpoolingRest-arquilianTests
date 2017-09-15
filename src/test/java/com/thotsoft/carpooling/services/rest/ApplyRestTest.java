@@ -162,9 +162,7 @@ public class ApplyRestTest {
                 .invoke();
         localAdvertisement.setId(adResponse.readEntity(Integer.class));
         adResponse.close();
-        UserRestTest.userList.add(admin);
         AdRestTest.advertisementList.add(localAdvertisement);
-        System.out.println(localAdvertisement);
 
         webTarget.path("/apply/")
                 .request(MediaType.APPLICATION_JSON_TYPE)

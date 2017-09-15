@@ -2,6 +2,7 @@ package com.thotsoft.carpooling.services;
 
 import com.thotsoft.carpooling.model.Advertisement;
 import com.thotsoft.carpooling.model.User;
+import com.thotsoft.carpooling.model.Vehicle;
 import com.thotsoft.carpooling.services.rest.AdRest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,7 +24,7 @@ public class AdRestImpl implements AdRest {
 
     @Context
     HttpServletRequest request;
-    
+
     @PersistenceContext
     private EntityManager em;
 
@@ -37,7 +38,8 @@ public class AdRestImpl implements AdRest {
         if (loggedUser == null) {
             throw new IllegalArgumentException("No user logged in!");
         }
-
+        advertisement.setUser(em.find(User.class, advertisement.getUser().getId()));
+        advertisement.setVehicle(em.find(Vehicle.class, advertisement.getVehicle().getLicenceNumber()));
         Objects.requireNonNull(advertisement);
         em.persist(advertisement);
         em.flush();
