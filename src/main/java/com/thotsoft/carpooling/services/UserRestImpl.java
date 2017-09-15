@@ -77,7 +77,7 @@ public class UserRestImpl implements UserRest {
         }
 
         if (user != null && loggedUser.isAdmin()) {
-            em.remove(user);
+            em.remove(em.contains(user) ? user : em.merge(user));
             logger.info("User was removed with this id: {}", user.getId());
             return true;
         } else {
@@ -122,6 +122,11 @@ public class UserRestImpl implements UserRest {
      */
     @Override
     public boolean isAlreadyRegistered(String email) {
+        User loggedUser = ((User) request.getSession().getAttribute("user"));
+        if (loggedUser == null) {
+            throw new IllegalArgumentException("No user logged in!");
+        }
+
         Objects.requireNonNull(email);
         CriteriaBuilder builder = em.getCriteriaBuilder();
         CriteriaQuery<User> criteriaQuery = builder.createQuery(User.class);
@@ -143,6 +148,7 @@ public class UserRestImpl implements UserRest {
      * @param email email string
      * @return User object by email
      */
+    @Override
     public User getUserByEmail(String email) {
         Objects.requireNonNull(email);
         CriteriaBuilder builder = em.getCriteriaBuilder();

@@ -13,10 +13,10 @@ public class Apply {
     @Column(name = FIELD_ID)
     private int id;
 
-    @OneToOne(optional = false, cascade = CascadeType.ALL)
+    @ManyToOne(optional = false, cascade = CascadeType.ALL)
     private User user;
 
-    @OneToOne(optional = false, cascade = CascadeType.ALL)
+    @ManyToOne(optional = false, cascade = CascadeType.ALL)
     private Advertisement advertisement;
 
     @Column(name = FIELD_DATE)

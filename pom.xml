@@ -131,6 +131,7 @@
                 <version>1.2.0.Beta1</version>
                 <configuration>
                     <java-opts>
+                        <java-opt>-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=8680</java-opt>
                     </java-opts>
                 </configuration>
             </plugin>

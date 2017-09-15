@@ -23,7 +23,7 @@ public class Advertisement implements Serializable {
     @Column(name = FIELD_SEEKING, nullable = false)
     private boolean seeking;
 
-    @OneToOne(optional = false, cascade = CascadeType.ALL)
+    @ManyToOne(optional = false, cascade = CascadeType.ALL)
     private User user;
 
     @Column(name = FIELD_FROMPLACE, nullable = false)

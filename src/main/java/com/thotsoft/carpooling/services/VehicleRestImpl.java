@@ -16,26 +16,25 @@ import java.util.Objects;
 @Stateless
 public class VehicleRestImpl implements VehicleRest {
     private static Logger logger = LoggerFactory.getLogger(VehicleRestImpl.class);
+
     @Context
     HttpServletRequest request;
+
     @PersistenceContext
     private EntityManager em;
 
     /**
-     *
      * @param vehicle Vehicle object to insert into DB
      */
     @Override
     public String addVehicle(Vehicle vehicle) {
         Objects.requireNonNull(vehicle);
         em.persist(vehicle);
-        em.flush();
         logger.info("Vehicle added: {}", vehicle);
         return vehicle.getLicenceNumber();
     }
 
     /**
-     *
      * @param licenceNumber licence number of vehicle
      * @return Was this successfully
      */
@@ -52,14 +51,13 @@ public class VehicleRestImpl implements VehicleRest {
     }
 
     /**
-     *
      * @param vehicle Vehicle object to remove from DB
      * @return Was this successfully
      */
     @Override
     public boolean removeVehicle(Vehicle vehicle) {
         if (vehicle != null) {
-            em.remove(vehicle);
+            em.remove(em.contains(vehicle) ? vehicle : em.merge(vehicle));
             logger.info("User was removed with this id: {}", vehicle.getLicenceNumber());
             return true;
         } else {
@@ -68,7 +66,6 @@ public class VehicleRestImpl implements VehicleRest {
     }
 
     /**
-     *
      * @param licenceNumber licence number of vehicle
      * @return Vehicle object by licenceNumber
      */
@@ -78,9 +75,8 @@ public class VehicleRestImpl implements VehicleRest {
     }
 
     /**
-     *
      * @param licenceNumber licence number of vehicle
-     * @param vehicle vehicle object by licenceNumber for update DB record to this
+     * @param vehicle       vehicle object by licenceNumber for update DB record to this
      */
     @Override
     public void updateVehicle(String licenceNumber, Vehicle vehicle) {
@@ -93,7 +89,6 @@ public class VehicleRestImpl implements VehicleRest {
     }
 
     /**
-     *
      * @return List of Vehicles of all
      */
     @Override

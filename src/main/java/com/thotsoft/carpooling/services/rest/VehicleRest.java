@@ -14,7 +14,7 @@ public interface VehicleRest {
     String addVehicle(Vehicle vehicle);
 
     @DELETE
-    @Path("/{id}")
+    @Path("/{licenceNumber}")
     @Produces(MediaType.APPLICATION_JSON)
     boolean removeVehicle(@PathParam("licenceNumber") String licenceNumber);
 
@@ -29,9 +29,9 @@ public interface VehicleRest {
     Vehicle getVehicle(@PathParam("licenceNumber") String licenceNumber);
 
     @POST
-    @Path("/{id}")
+    @Path("/{licenceNumber}")
     @Consumes(MediaType.APPLICATION_JSON)
-    void updateVehicle(@PathParam("id") String licenceNumber, Vehicle vehicle);
+    void updateVehicle(@PathParam("licenceNumber") String licenceNumber, Vehicle vehicle);
 
     @GET
     @Path("/list")

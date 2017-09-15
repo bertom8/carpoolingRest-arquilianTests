@@ -26,7 +26,6 @@ public class AdRestImpl implements AdRest {
     private EntityManager em;
 
     /**
-     *
      * @param advertisement Advertisement object to insert to DB
      */
     @Override
@@ -39,7 +38,6 @@ public class AdRestImpl implements AdRest {
     }
 
     /**
-     *
      * @param id id of Advertisement to remove from DB
      * @return Was this successfully
      */
@@ -56,14 +54,13 @@ public class AdRestImpl implements AdRest {
     }
 
     /**
-     *
      * @param advertisement Advertosement object to remove from DB
      * @return Was this successfully
      */
     @Override
     public boolean removeAdvertisement(Advertisement advertisement) {
         if (advertisement != null) {
-            em.remove(advertisement);
+            em.remove(em.contains(advertisement) ? advertisement : em.merge(advertisement));
             logger.info("Advertisement removed: {}", advertisement);
             return true;
         } else {
@@ -72,7 +69,6 @@ public class AdRestImpl implements AdRest {
     }
 
     /**
-     *
      * @param id id of Advertisement to get from DB
      * @return Advertisement object by id argument
      */
@@ -82,8 +78,7 @@ public class AdRestImpl implements AdRest {
     }
 
     /**
-     *
-     * @param id id of Advertisement to update
+     * @param id            id of Advertisement to update
      * @param advertisement Advertisement object for update operation with id field equals id argument
      */
     @Override
@@ -97,7 +92,6 @@ public class AdRestImpl implements AdRest {
     }
 
     /**
-     *
      * @param user Optional User object to list its Advertisements
      * @return List of Advertisement of argument user or session user
      */
@@ -116,7 +110,6 @@ public class AdRestImpl implements AdRest {
 //    }
 
     /**
-     *
      * @param user Optional User object to count its Advertisements
      * @return count of advertisement of argument user or session user
      */
@@ -135,7 +128,6 @@ public class AdRestImpl implements AdRest {
     }
 
     /**
-     *
      * @param user User object
      * @return List of Advertisement of user
      */

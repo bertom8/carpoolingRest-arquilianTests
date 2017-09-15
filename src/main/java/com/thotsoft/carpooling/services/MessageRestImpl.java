@@ -26,7 +26,6 @@ public class MessageRestImpl implements MessageRest {
     private EntityManager em;
 
     /**
-     *
      * @param message Message object to insert into DB
      */
     @Override
@@ -39,7 +38,6 @@ public class MessageRestImpl implements MessageRest {
     }
 
     /**
-     *
      * @param id id of Message to remove
      * @return Was this successfully
      */
@@ -56,14 +54,13 @@ public class MessageRestImpl implements MessageRest {
     }
 
     /**
-     *
      * @param message Message object to remove
      * @return Was this successfully
      */
     @Override
     public boolean removeMessage(Message message) {
         if (message != null) {
-            em.remove(message);
+            em.remove(em.contains(message) ? message : em.merge(message));
             logger.info("Message was removed with this id: {}", message.getId());
             return true;
         } else {
@@ -72,7 +69,6 @@ public class MessageRestImpl implements MessageRest {
     }
 
     /**
-     *
      * @param id id of Message
      * @return Message object by id
      */
@@ -82,7 +78,6 @@ public class MessageRestImpl implements MessageRest {
     }
 
     /**
-     *
      * @return List of Messages of all
      */
     @Override
@@ -91,7 +86,6 @@ public class MessageRestImpl implements MessageRest {
     }
 
     /**
-     *
      * @param fromUser User object from whom messages came
      * @return List of Messages from argument user
      */
@@ -107,7 +101,6 @@ public class MessageRestImpl implements MessageRest {
     }
 
     /**
-     *
      * @param toUser User object to whom messages went
      * @return List of Messages to argument user
      */

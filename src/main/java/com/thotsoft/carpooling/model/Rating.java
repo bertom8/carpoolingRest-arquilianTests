@@ -12,32 +12,14 @@ public class Rating {
     @Column(name = FIELD_ID)
     private int id;
 
-    @OneToOne(optional = false)
+    @ManyToOne()
     private User giveRating;
 
-    @OneToOne(optional = false, cascade = CascadeType.ALL)
+    @ManyToOne(optional = false, cascade = CascadeType.ALL)
     private User getRating;
 
     @Column(name = FIELD_RATING, nullable = false)
     private Rate rating;
-
-    public enum Rate {
-        BAD(1),
-        NOT_BAD(2),
-        AVERAGE(3),
-        OK(4),
-        EXCELLENT(5);
-
-        int rate;
-
-        Rate(int i) {
-            rate = i;
-        }
-
-        public int getRate() {
-            return rate;
-        }
-    }
 
     public int getId() {
         return id;
@@ -98,5 +80,23 @@ public class Rating {
                 ", getRating=" + getRating +
                 ", rating=" + rating +
                 '}';
+    }
+
+    public enum Rate {
+        BAD(1),
+        NOT_BAD(2),
+        AVERAGE(3),
+        OK(4),
+        EXCELLENT(5);
+
+        int rate;
+
+        Rate(int i) {
+            rate = i;
+        }
+
+        public int getRate() {
+            return rate;
+        }
     }
 }

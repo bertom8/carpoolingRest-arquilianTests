@@ -13,6 +13,7 @@ import javax.ws.rs.core.Context;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Objects;
 
 @Stateless
 public class LoginRestImpl implements LoginRest {
@@ -25,39 +26,11 @@ public class LoginRestImpl implements LoginRest {
     private UserRest userRest;
 
     /**
-     *
-     * @param email email string
-     * @param password password string
-     * @return Was the login successfully
-     */
-    @Override
-    public boolean login(String email, String password) {
-        User user = userRest.getUserByEmail(email);
-        if (user != null) {
-            if (user.getPassword().equals(hash(password))) {
-                request.getSession(true).setAttribute("user", user);
-                return true;
-            }
-        } else {
-            throw new IllegalArgumentException("There was no user with this data");
-        }
-        return false;
-    }
-
-    /**
-     * Log out the user in session
-     */
-    @Override
-    public void logout() {
-        request.getSession().removeAttribute("user");
-    }
-
-    /**
-     *
      * @param password password string
      * @return hash of password string
      */
-    static String hash(String password) {
+    public static String hash(String password) {
+        Objects.requireNonNull(password);
         MessageDigest md = null;
         try {
             md = MessageDigest.getInstance("SHA-256");
@@ -73,5 +46,36 @@ public class LoginRestImpl implements LoginRest {
             logger.error("Wrong hash algorithm or encoding");
             return null;
         }
+    }
+
+    /**
+     * @param email    email string
+     * @param password password string
+     * @return Was the login successfully
+     */
+    @Override
+    public boolean login(String email, String password) {
+        User user = userRest.getUserByEmail(email);
+        if (user != null) {
+            try {
+                if (user.getPassword().equals(hash(password))) {
+                    request.getSession(true).setAttribute("user", user);
+                    return true;
+                }
+            } catch (NullPointerException e) {
+                throw new IllegalArgumentException("Password was null");
+            }
+        } else {
+            throw new IllegalArgumentException("There was no user with this data");
+        }
+        return false;
+    }
+
+    /**
+     * Log out the user in session
+     */
+    @Override
+    public void logout() {
+        request.getSession().removeAttribute("user");
     }
 }

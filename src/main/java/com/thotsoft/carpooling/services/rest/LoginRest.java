@@ -6,10 +6,9 @@ import javax.ws.rs.core.MediaType;
 @Path("/login")
 public interface LoginRest {
 
-    @GET
-    @Path("/{email}/{password}")
+    @POST
     @Produces(MediaType.APPLICATION_JSON)
-    boolean login(@PathParam("email") String email, @PathParam("password") String password);
+    boolean login(@FormParam("email") String email, @FormParam("password") String password);
 
     @DELETE
     void logout();

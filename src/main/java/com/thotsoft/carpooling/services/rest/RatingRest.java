@@ -10,9 +10,11 @@ import javax.ws.rs.core.MediaType;
 public interface RatingRest {
     @PUT
     @Path("/{rate}")
+    @Consumes(MediaType.APPLICATION_JSON)
     void rate(User rateWhom, @PathParam("rate") Rating.Rate rate);
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
     double getRating(User user);
 }

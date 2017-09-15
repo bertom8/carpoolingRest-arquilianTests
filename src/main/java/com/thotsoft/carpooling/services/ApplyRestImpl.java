@@ -7,6 +7,7 @@ import com.thotsoft.carpooling.services.rest.ApplyRest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -20,31 +21,33 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
+@Stateless
 public class ApplyRestImpl implements ApplyRest {
     private static Logger logger = LoggerFactory.getLogger(ApplyRestImpl.class);
-
+    @Context
+    HttpServletRequest request;
     @PersistenceContext
     private EntityManager em;
 
-    @Context
-    HttpServletRequest request;
-
     /**
-     *
      * @param advertisement Advertisement object to apply by session user
      * @throws IOException throws if Advertisement is full
      */
     @Override
     public void apply(Advertisement advertisement) throws IOException {
         Objects.requireNonNull(advertisement);
-        User user = ((User)request.getSession().getAttribute("user"));
+        User user = ((User) request.getSession().getAttribute("user"));
         if (user == null) {
             throw new IllegalArgumentException("No user logged in!");
         }
         if (advertisement.getNumOfSeats() - countAppliesForAdvertisement(advertisement) > 0) {
+            Advertisement storedAd = em.find(Advertisement.class, advertisement.getId());
+            if (storedAd.isSeeking()) {
+                throw new IllegalArgumentException("This is an seeking advertisement, you can not apply for that");
+            }
             Apply apply = new Apply();
             apply.setUser(user);
-            apply.setAdvertisement(advertisement);
+            apply.setAdvertisement(storedAd);
             apply.setDate(new Date());
             em.persist(apply);
             em.flush();
@@ -55,14 +58,13 @@ public class ApplyRestImpl implements ApplyRest {
     }
 
     /**
-     *
      * @param advertisement Advertisement object to cancel by session user
      * @throws IOException throws if this advertisement is not applied for session user
      */
     @Override
     public void cancel(Advertisement advertisement) throws IOException {
         Objects.requireNonNull(advertisement);
-        User user = ((User)request.getSession().getAttribute("user"));
+        User user = ((User) request.getSession().getAttribute("user"));
         if (user == null) {
             throw new IllegalArgumentException("No user logged in!");
         }
@@ -82,12 +84,11 @@ public class ApplyRestImpl implements ApplyRest {
     }
 
     /**
-     *
      * @return list of applied advertisement of session user
      */
     @Override
     public List<Advertisement> getAppliedAds() {
-        User user = ((User)request.getSession().getAttribute("user"));
+        User user = ((User) request.getSession().getAttribute("user"));
         if (user == null) {
             throw new IllegalArgumentException("No user logged in!");
         }
@@ -108,7 +109,6 @@ public class ApplyRestImpl implements ApplyRest {
     }
 
     /**
-     *
      * @param advertisement Advertisement object
      * @return count of user applies for advertisement
      */
