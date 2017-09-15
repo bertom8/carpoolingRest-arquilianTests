@@ -40,6 +40,7 @@ public class ApplyRestImpl implements ApplyRest {
         if (user == null) {
             throw new IllegalArgumentException("No user logged in!");
         }
+        advertisement = em.find(Advertisement.class, advertisement.getId());
         if (advertisement.getNumOfSeats() - countAppliesForAdvertisement(advertisement) > 0) {
             Advertisement storedAd = em.find(Advertisement.class, advertisement.getId());
             if (storedAd.isSeeking()) {

@@ -1,5 +1,6 @@
 package com.thotsoft.carpooling.services.rest;
 
+import com.thotsoft.carpooling.model.Advertisement;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.test.api.RunAsClient;
 import org.jboss.arquillian.extension.rest.client.ArquillianResteasyResource;
@@ -10,10 +11,14 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 @RunWith(Arquillian.class)
 @RunAsClient
 public class AdRestTest {
+
+    static List<Advertisement> advertisementList = new ArrayList<>();
 
     @ArquillianResource
     private URL deploymentURL;

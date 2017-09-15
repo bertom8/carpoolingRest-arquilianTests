@@ -128,7 +128,7 @@ public class UserRestTest {
     public void removeUser(@ArquillianResteasyResource("") WebTarget webTarget) {
         User localAdmin = new User();
         localAdmin.setPassword("123456");
-        localAdmin.setAdmin(false);
+        localAdmin.setAdmin(true);
         localAdmin.setEmail("admin1@jee.hu");
         localAdmin.setName("Phil");
         localAdmin.setPhoneNumber("85967485");
@@ -157,7 +157,7 @@ public class UserRestTest {
                             @ArquillianResteasyResource("") UserRest userRest) {
         User localAdmin = new User();
         localAdmin.setPassword("123456");
-        localAdmin.setAdmin(false);
+        localAdmin.setAdmin(true);
         localAdmin.setEmail("admin2@jee.hu");
         localAdmin.setName("Phil");
         localAdmin.setPhoneNumber("85967485");
@@ -187,7 +187,7 @@ public class UserRestTest {
     public void removeNullUser(@ArquillianResteasyResource("") WebTarget webTarget) {
         User notAdmin = new User();
         notAdmin.setPassword("123456");
-        notAdmin.setAdmin(false);
+        notAdmin.setAdmin(true);
         notAdmin.setEmail("notadmin@jee.hu");
         notAdmin.setName("Phil");
         notAdmin.setPhoneNumber("85967485");

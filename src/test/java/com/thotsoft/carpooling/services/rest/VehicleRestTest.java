@@ -1,5 +1,6 @@
 package com.thotsoft.carpooling.services.rest;
 
+import com.thotsoft.carpooling.model.User;
 import com.thotsoft.carpooling.model.Vehicle;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.test.api.RunAsClient;
@@ -7,10 +8,15 @@ import org.jboss.arquillian.extension.rest.client.ArquillianResteasyResource;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.test.api.ArquillianResource;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import javax.ws.rs.HttpMethod;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.Cookie;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,8 +27,6 @@ import static org.junit.Assert.assertTrue;
 @RunWith(Arquillian.class)
 @RunAsClient
 public class VehicleRestTest {
-    private static Vehicle vehicle = new Vehicle();
-    private static Vehicle vehicle2 = new Vehicle();
     private static List<Vehicle> vehicleList = new ArrayList<>();
 
     @ArquillianResource
@@ -33,35 +37,21 @@ public class VehicleRestTest {
         return CreateDeployment.createDeployment();
     }
 
-    @BeforeClass
-    public static void beforeClass() {
-        vehicle.setLicenceNumber("asd-789");
-        vehicle.setType("M3");
-        vehicle.setManufacturer("BMW");
-        vehicle.setDesign("Sedan");
-        vehicle.setColor("black");
-        vehicle.setRoad(true);
-        vehicle.setAnimal(false);
-        vehicle.setClime(true);
-        vehicle.setComfort(true);
-        vehicle.setSmoking(false);
-
-        vehicle2.setLicenceNumber("qwe-123");
-        vehicle2.setType("Swift");
-        vehicle2.setManufacturer("Suzuki");
-        vehicle2.setDesign("Sedan");
-        vehicle2.setColor("green");
-        vehicle2.setRoad(true);
-        vehicle2.setAnimal(true);
-        vehicle2.setClime(false);
-        vehicle2.setComfort(false);
-        vehicle2.setSmoking(false);
-    }
-
     @Test
     public void addVehicle(@ArquillianResteasyResource("") VehicleRest vehicleRest) throws Exception {
-        assertEquals(vehicle.getLicenceNumber(), vehicleRest.addVehicle(vehicle));
-        vehicleList.add(vehicle);
+        Vehicle localVehicle = new Vehicle();
+        localVehicle.setLicenceNumber("addVehicle-1");
+        localVehicle.setType("M3");
+        localVehicle.setManufacturer("BMW");
+        localVehicle.setDesign("Sedan");
+        localVehicle.setColor("black");
+        localVehicle.setRoad(true);
+        localVehicle.setAnimal(false);
+        localVehicle.setClime(true);
+        localVehicle.setComfort(true);
+        localVehicle.setSmoking(false);
+        assertEquals(localVehicle.getLicenceNumber(), vehicleRest.addVehicle(localVehicle));
+        vehicleList.add(localVehicle);
     }
 
     @Test(expected = Exception.class)
@@ -75,10 +65,51 @@ public class VehicleRestTest {
     }
 
     @Test
-    public void removeVehicle(@ArquillianResteasyResource("") VehicleRest vehicleRest) throws Exception {
-        Vehicle testedVehicle = vehicleRest.getVehicle(vehicle.getLicenceNumber());
-        assertTrue(vehicleRest.removeVehicle(testedVehicle));
-        vehicleList.remove(vehicle);
+    public void removeVehicle(@ArquillianResteasyResource("") WebTarget webTarget) throws Exception {
+        User admin = new User();
+        admin.setPassword("removeVehicle");
+        admin.setAdmin(true);
+        admin.setEmail("removeVehicle@vehicle.com");
+        admin.setName("removeVehicle");
+        admin.setPhoneNumber("85967485");
+        webTarget.path("/user/")
+                .request(MediaType.APPLICATION_JSON_TYPE)
+                .buildPut(Entity.json(admin))
+                .invoke()
+                .close();
+        UserRestTest.userList.add(admin);
+
+        //Login with admin
+        Response login = webTarget.path("/login/" + admin.getEmail() + "/" + admin.getPassword())
+                .request(MediaType.APPLICATION_JSON_TYPE)
+                .get();
+        Cookie jSessionId = login.getCookies().get("JSESSIONID");
+        login.close();
+
+        Vehicle localVehicle = new Vehicle();
+        localVehicle.setLicenceNumber("removeVehicle-1");
+        localVehicle.setType("M3");
+        localVehicle.setManufacturer("BMW");
+        localVehicle.setDesign("Sedan");
+        localVehicle.setColor("black");
+        localVehicle.setRoad(true);
+        localVehicle.setAnimal(false);
+        localVehicle.setClime(true);
+        localVehicle.setComfort(true);
+        localVehicle.setSmoking(false);
+
+        webTarget.path("/vehicle/")
+                .request(MediaType.APPLICATION_JSON_TYPE)
+                .buildPut(Entity.json(localVehicle))
+                .invoke().close();
+        vehicleList.add(localVehicle);
+
+        Response response = webTarget.path("/vehicle")
+                .request(MediaType.APPLICATION_JSON_TYPE)
+                .cookie(jSessionId)
+                .build(HttpMethod.DELETE, Entity.json(localVehicle))
+                .invoke();
+        assertTrue(response.readEntity(Boolean.class));
     }
 
     @Test(expected = Exception.class)
@@ -97,20 +128,69 @@ public class VehicleRestTest {
     }
 
     @Test
-    public void removeVehicle1(@ArquillianResteasyResource("") VehicleRest vehicleRest) throws Exception {
-        vehicleRest.addVehicle(vehicle2);
-        vehicleList.add(vehicle2);
-        assertTrue(vehicleRest.removeVehicle(vehicle2.getLicenceNumber()));
-        vehicleList.remove(vehicle2);
+    public void removeVehicle1(@ArquillianResteasyResource("") WebTarget webTarget) throws Exception {
+        User admin = new User();
+        admin.setPassword("removeVehicle1");
+        admin.setAdmin(true);
+        admin.setEmail("removeVehicle1@vehicle.com");
+        admin.setName("removeVehicle1");
+        admin.setPhoneNumber("85967485");
+        webTarget.path("/user/")
+                .request(MediaType.APPLICATION_JSON_TYPE)
+                .buildPut(Entity.json(admin))
+                .invoke()
+                .close();
+        UserRestTest.userList.add(admin);
+
+        //Login with admin
+        Response login = webTarget.path("/login/" + admin.getEmail() + "/" + admin.getPassword())
+                .request(MediaType.APPLICATION_JSON_TYPE)
+                .get();
+        Cookie jSessionId = login.getCookies().get("JSESSIONID");
+        login.close();
+
+        Vehicle localVehicle = new Vehicle();
+        localVehicle.setLicenceNumber("removeVehicle1-1");
+        localVehicle.setType("M3");
+        localVehicle.setManufacturer("BMW");
+        localVehicle.setDesign("Sedan");
+        localVehicle.setColor("black");
+        localVehicle.setRoad(true);
+        localVehicle.setAnimal(false);
+        localVehicle.setClime(true);
+        localVehicle.setComfort(true);
+        localVehicle.setSmoking(false);
+
+        webTarget.path("/vehicle/")
+                .request(MediaType.APPLICATION_JSON_TYPE)
+                .buildPut(Entity.json(localVehicle))
+                .invoke().close();
+        vehicleList.add(localVehicle);
+
+        Response response = webTarget.path("/vehicle/{licenceNumber}")
+                .resolveTemplate("licenceNumber", localVehicle.getLicenceNumber())
+                .request(MediaType.APPLICATION_JSON_TYPE)
+                .cookie(jSessionId)
+                .delete();
+        assertTrue(response.readEntity(Boolean.class));
     }
 
     @Test
     public void getVehicle(@ArquillianResteasyResource("") VehicleRest vehicleRest) throws Exception {
-        Vehicle vehicle3 = vehicle2;
-        vehicle3.setLicenceNumber("uhj-759");
-        vehicleRest.addVehicle(vehicle3);
-        vehicleList.add(vehicle3);
-        assertEquals(vehicle3, vehicleRest.getVehicle(vehicle3.getLicenceNumber()));
+        Vehicle localVehicle = new Vehicle();
+        localVehicle.setLicenceNumber("getVehicle-1");
+        localVehicle.setType("M3");
+        localVehicle.setManufacturer("BMW");
+        localVehicle.setDesign("Sedan");
+        localVehicle.setColor("black");
+        localVehicle.setRoad(true);
+        localVehicle.setAnimal(false);
+        localVehicle.setClime(true);
+        localVehicle.setComfort(true);
+        localVehicle.setSmoking(false);
+        vehicleRest.addVehicle(localVehicle);
+        vehicleList.add(localVehicle);
+        assertEquals(localVehicle, vehicleRest.getVehicle(localVehicle.getLicenceNumber()));
     }
 
     @Test(expected = Exception.class)
@@ -120,15 +200,28 @@ public class VehicleRestTest {
 
     @Test
     public void updateVehicle(@ArquillianResteasyResource("") VehicleRest vehicleRest) throws Exception {
-        Vehicle vehicle4 = vehicle2;
-        vehicle4.setManufacturer("OwnManufacturer");
-        vehicleRest.updateVehicle(vehicle4.getLicenceNumber(), vehicle4);
-        assertEquals(vehicle4, vehicleRest.getVehicle(vehicle2.getLicenceNumber()));
+        Vehicle localVehicle = new Vehicle();
+        localVehicle.setLicenceNumber("updateVehicle-1");
+        localVehicle.setType("M3");
+        localVehicle.setManufacturer("BMW");
+        localVehicle.setDesign("Sedan");
+        localVehicle.setColor("black");
+        localVehicle.setRoad(true);
+        localVehicle.setAnimal(false);
+        localVehicle.setClime(true);
+        localVehicle.setComfort(true);
+        localVehicle.setSmoking(false);
+        vehicleRest.addVehicle(localVehicle);
+        vehicleList.add(localVehicle);
+
+        localVehicle.setManufacturer("OwnManufacturer");
+        vehicleRest.updateVehicle(localVehicle.getLicenceNumber(), localVehicle);
+        assertEquals(localVehicle, vehicleRest.getVehicle(localVehicle.getLicenceNumber()));
     }
 
     @Test(expected = Exception.class)
     public void updateNullVehicle(@ArquillianResteasyResource("") VehicleRest vehicleRest) {
-        vehicleRest.updateVehicle(vehicle.getLicenceNumber(), null);
+        vehicleRest.updateVehicle("updateNullVehicle-1", null);
     }
 
     @Test

@@ -39,11 +39,6 @@ public interface AdRest {
     @Produces(MediaType.APPLICATION_JSON)
     List<Advertisement> listAds(User user);
 
-//    @GET
-//    @Path("/list")
-//    @Produces(MediaType.APPLICATION_JSON)
-//    List<Advertisement> listAds(AdOptions options);
-
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     int countAds(User user);

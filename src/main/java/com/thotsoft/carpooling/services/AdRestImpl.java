@@ -20,8 +20,10 @@ import java.util.Objects;
 @Stateless
 public class AdRestImpl implements AdRest {
     private static Logger logger = LoggerFactory.getLogger(AdRestImpl.class);
+
     @Context
     HttpServletRequest request;
+    
     @PersistenceContext
     private EntityManager em;
 
@@ -127,11 +129,6 @@ public class AdRestImpl implements AdRest {
             return getAdvertisementsByUser(user);
         }
     }
-
-//    @Override
-//    public List<Advertisement> listAds(AdOptions options) {
-//        return null;
-//    }
 
     /**
      * @param user Optional User object to count its Advertisements
