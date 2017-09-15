@@ -29,6 +29,11 @@ public interface MessageRest {
     @Produces(MediaType.APPLICATION_JSON)
     Message getMessage(@PathParam("id") int id);
 
+    @POST
+    @Path("/{id}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    void updateUser(@PathParam("id") int id, Message message);
+
     @GET
     @Path("/list")
     @Produces(MediaType.APPLICATION_JSON)

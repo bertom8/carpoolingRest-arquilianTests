@@ -27,9 +27,15 @@ public class MessageRestImpl implements MessageRest {
 
     /**
      * @param message Message object to insert into DB
+     * @return Id of Message
      */
     @Override
     public int addMessage(Message message) {
+        User loggedUser = ((User) request.getSession().getAttribute("user"));
+        if (loggedUser == null) {
+            throw new IllegalArgumentException("No user logged in!");
+        }
+
         Objects.requireNonNull(message);
         em.persist(message);
         em.flush();
@@ -43,11 +49,20 @@ public class MessageRestImpl implements MessageRest {
      */
     @Override
     public boolean removeMessage(int id) {
+        User loggedUser = ((User) request.getSession().getAttribute("user"));
+        if (loggedUser == null) {
+            throw new IllegalArgumentException("No user logged in!");
+        }
+
         Message message = getMessage(id);
         if (message != null) {
-            em.remove(message);
-            logger.info("Message was removed with this id: {}", id);
-            return true;
+            if (loggedUser.isAdmin() || loggedUser.equals(message.getTarget())) {
+                em.remove(message);
+                logger.info("Message was removed with this id: {}", id);
+                return true;
+            } else {
+                throw new IllegalArgumentException("This user can not remove this item: " + loggedUser);
+            }
         } else {
             throw new IllegalArgumentException("There was no such item in database: " + id);
         }
@@ -59,10 +74,19 @@ public class MessageRestImpl implements MessageRest {
      */
     @Override
     public boolean removeMessage(Message message) {
+        User loggedUser = ((User) request.getSession().getAttribute("user"));
+        if (loggedUser == null) {
+            throw new IllegalArgumentException("No user logged in!");
+        }
+
         if (message != null) {
-            em.remove(em.contains(message) ? message : em.merge(message));
-            logger.info("Message was removed with this id: {}", message.getId());
-            return true;
+            if (loggedUser.isAdmin() || loggedUser.equals(message.getTarget())) {
+                em.remove(em.contains(message) ? message : em.merge(message));
+                logger.info("Message was removed with this id: {}", message.getId());
+                return true;
+            } else {
+                throw new IllegalArgumentException("This user can not remove this item: " + loggedUser);
+            }
         } else {
             throw new IllegalArgumentException("Message was null");
         }
@@ -75,6 +99,20 @@ public class MessageRestImpl implements MessageRest {
     @Override
     public Message getMessage(int id) {
         return em.find(Message.class, id);
+    }
+
+    /**
+     * @param id      id of Message
+     * @param message Message object by id argument for update to this
+     */
+    @Override
+    public void updateUser(int id, Message message) {
+        Objects.requireNonNull(message);
+        Message storedMessage = getMessage(id);
+        if (storedMessage != null) {
+            em.merge(message);
+            logger.info("Message updated: {}", message);
+        }
     }
 
     /**

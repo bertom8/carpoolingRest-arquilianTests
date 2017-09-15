@@ -27,9 +27,15 @@ public class AdRestImpl implements AdRest {
 
     /**
      * @param advertisement Advertisement object to insert to DB
+     * @return Id of Advertisement
      */
     @Override
     public int addAdvertisement(Advertisement advertisement) {
+        User loggedUser = ((User) request.getSession().getAttribute("user"));
+        if (loggedUser == null) {
+            throw new IllegalArgumentException("No user logged in!");
+        }
+
         Objects.requireNonNull(advertisement);
         em.persist(advertisement);
         em.flush();
@@ -43,11 +49,20 @@ public class AdRestImpl implements AdRest {
      */
     @Override
     public boolean removeAdvertisement(int id) {
+        User loggedUser = ((User) request.getSession().getAttribute("user"));
+        if (loggedUser == null) {
+            throw new IllegalArgumentException("No user logged in!");
+        }
+
         Advertisement ad = getAdvertisement(id);
         if (ad != null) {
-            em.remove(ad);
-            logger.info("Advertisement was removed with this id: {}", id);
-            return true;
+            if (loggedUser.isAdmin() || loggedUser.equals(ad.getUser())) {
+                em.remove(ad);
+                logger.info("Advertisement was removed with this id: {}", id);
+                return true;
+            } else {
+                throw new IllegalArgumentException("This user can not remove this item: " + loggedUser);
+            }
         } else {
             throw new IllegalArgumentException("There was no such item in database: " + id);
         }
@@ -59,10 +74,19 @@ public class AdRestImpl implements AdRest {
      */
     @Override
     public boolean removeAdvertisement(Advertisement advertisement) {
+        User loggedUser = ((User) request.getSession().getAttribute("user"));
+        if (loggedUser == null) {
+            throw new IllegalArgumentException("No user logged in!");
+        }
+
         if (advertisement != null) {
-            em.remove(em.contains(advertisement) ? advertisement : em.merge(advertisement));
-            logger.info("Advertisement removed: {}", advertisement);
-            return true;
+            if (loggedUser.isAdmin() || loggedUser.equals(advertisement.getUser())) {
+                em.remove(em.contains(advertisement) ? advertisement : em.merge(advertisement));
+                logger.info("Advertisement removed: {}", advertisement);
+                return true;
+            } else {
+                throw new IllegalArgumentException("This user can not remove this item: " + loggedUser);
+            }
         } else {
             throw new IllegalArgumentException("Advertisement was null");
         }

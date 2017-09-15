@@ -30,7 +30,8 @@ public class RatingRestTest {
 
     @Test
     public void rate(@ArquillianResteasyResource("") RatingRest ratingRest,
-                     @ArquillianResteasyResource("") UserRest userRest) throws Exception {
+                     @ArquillianResteasyResource("") UserRest userRest,
+                     @ArquillianResteasyResource("") LoginRest loginRest) throws Exception {
         User user = new User();
         user.setAddress(new Address());
         user.setPassword("123456");
@@ -40,6 +41,7 @@ public class RatingRestTest {
         user.setPhoneNumber("85967485");
         user.setId(userRest.addUser(user));
         UserRestTest.userList.add(user);
+        loginRest.login(user.getEmail(), user.getPassword());
 
         ratingRest.rate(user, Rating.Rate.EXCELLENT);
         assertEquals(0, ratingRest.getRating(user), 0);

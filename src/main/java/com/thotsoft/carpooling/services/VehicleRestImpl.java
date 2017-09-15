@@ -1,5 +1,6 @@
 package com.thotsoft.carpooling.services;
 
+import com.thotsoft.carpooling.model.User;
 import com.thotsoft.carpooling.model.Vehicle;
 import com.thotsoft.carpooling.services.rest.VehicleRest;
 import org.slf4j.Logger;
@@ -25,6 +26,7 @@ public class VehicleRestImpl implements VehicleRest {
 
     /**
      * @param vehicle Vehicle object to insert into DB
+     * @return Licence number of Vehicle
      */
     @Override
     public String addVehicle(Vehicle vehicle) {
@@ -40,6 +42,11 @@ public class VehicleRestImpl implements VehicleRest {
      */
     @Override
     public boolean removeVehicle(String licenceNumber) {
+        User loggedUser = ((User) request.getSession().getAttribute("user"));
+        if (loggedUser == null) {
+            throw new IllegalArgumentException("No user logged in!");
+        }
+
         Vehicle vehicle = getVehicle(licenceNumber);
         if (vehicle != null) {
             em.remove(vehicle);
@@ -56,6 +63,11 @@ public class VehicleRestImpl implements VehicleRest {
      */
     @Override
     public boolean removeVehicle(Vehicle vehicle) {
+        User loggedUser = ((User) request.getSession().getAttribute("user"));
+        if (loggedUser == null) {
+            throw new IllegalArgumentException("No user logged in!");
+        }
+
         if (vehicle != null) {
             em.remove(em.contains(vehicle) ? vehicle : em.merge(vehicle));
             logger.info("User was removed with this id: {}", vehicle.getLicenceNumber());

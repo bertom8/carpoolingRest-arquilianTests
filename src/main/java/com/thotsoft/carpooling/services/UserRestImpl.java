@@ -30,6 +30,7 @@ public class UserRestImpl implements UserRest {
 
     /**
      * @param user User object to insert into DB
+     * @return Id of User
      */
     @Override
     public int addUser(User user) {
