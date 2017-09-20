@@ -16,16 +16,19 @@ import javax.persistence.criteria.Root;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.Context;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Stateless
 public class ApplyRestImpl implements ApplyRest {
+
     private static Logger logger = LoggerFactory.getLogger(ApplyRestImpl.class);
+
     @Context
-    HttpServletRequest request;
+    private HttpServletRequest request;
+
     @PersistenceContext
     private EntityManager em;
 
@@ -47,7 +50,7 @@ public class ApplyRestImpl implements ApplyRest {
                 throw new IllegalArgumentException("This is an seeking advertisement, you can not apply for that");
             }
             Apply apply = new Apply();
-            apply.setUser(user);
+            apply.setUser(em.find(User.class, user.getId()));
             apply.setAdvertisement(storedAd);
             apply.setDate(new Date());
             em.persist(apply);
@@ -100,11 +103,9 @@ public class ApplyRestImpl implements ApplyRest {
         criteriaQuery.where(builder.equal(applyRoot.get("user"), user));
         List<Apply> applyList = em.createQuery(criteriaQuery).getResultList();
         if (applyList != null) {
-            List<Advertisement> ads = new ArrayList<>();
-            applyList.forEach(apply -> {
-                ads.add(apply.getAdvertisement());
-            });
-            return ads;
+            return applyList.stream()
+                    .map(Apply::getAdvertisement)
+                    .collect(Collectors.toList());
         }
         return null;
     }

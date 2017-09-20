@@ -11,6 +11,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <wildfly.arquillian.version>2.0.2.Final</wildfly.arquillian.version>
     </properties>
 
     <dependencyManagement>
@@ -43,16 +44,23 @@
         </dependency>
 
         <dependency>
+            <groupId>org.keycloak</groupId>
+            <artifactId>keycloak-authz-client</artifactId>
+            <version>3.2.1.Final</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
             <groupId>org.jboss.arquillian.junit</groupId>
             <artifactId>arquillian-junit-container</artifactId>
             <scope>test</scope>
         </dependency>
 
-        <dependency>
-            <groupId>org.wildfly.arquillian</groupId>
-            <artifactId>wildfly-arquillian-container-managed</artifactId>
-            <version>2.0.2.Final</version>
-        </dependency>
+        <!--<dependency>-->
+        <!--<groupId>org.wildfly.arquillian</groupId>-->
+        <!--<artifactId>wildfly-arquillian-container-managed</artifactId>-->
+        <!--<version>2.0.2.Final</version>-->
+        <!--</dependency>-->
 
         <dependency>
             <groupId>org.jboss.shrinkwrap.resolver</groupId>
@@ -112,6 +120,12 @@
             <artifactId>slf4j-api</artifactId>
             <version>1.7.25</version>
         </dependency>
+        
+        <dependency>
+            <groupId>org.keycloak</groupId>
+            <artifactId>keycloak-core</artifactId>
+            <version>3.2.1.Final</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -131,27 +145,94 @@
                 <version>1.2.0.Beta1</version>
                 <configuration>
                     <java-opts>
-                        <java-opt>-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=8680</java-opt>
+                        <java-opt>-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=8787</java-opt>
                     </java-opts>
                 </configuration>
             </plugin>
 
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.17</version>
-                <configuration>
-                    <!-- Fork every test because it will launch a separate AS instance -->
-                    <forkMode>always</forkMode>
-                    <systemPropertyVariables>
-                        <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
-                        <!-- the maven dependency plugin will have already downloaded the server on /target -->
-                        <jboss.home>${jboss-as.home}</jboss.home>
-                        <!--<arquillian.launch>wildfly-managed</arquillian.launch>-->
-                    </systemPropertyVariables>
-                    <redirectTestOutputToFile>false</redirectTestOutputToFile>
-                </configuration>
-            </plugin>
+            <!--<plugin>-->
+            <!--<groupId>org.apache.maven.plugins</groupId>-->
+            <!--<artifactId>maven-surefire-plugin</artifactId>-->
+            <!--<version>2.17</version>-->
+            <!--<configuration>-->
+            <!--&lt;!&ndash; Fork every test because it will launch a separate AS instance &ndash;&gt;-->
+            <!--<forkMode>always</forkMode>-->
+            <!--<systemPropertyVariables>-->
+            <!--<java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>-->
+            <!--&lt;!&ndash; the maven dependency plugin will have already downloaded the server on /target &ndash;&gt;-->
+            <!--<jboss.home>${jboss-as.home}</jboss.home>-->
+            <!--&lt;!&ndash;<arquillian.launch>wildfly-managed</arquillian.launch>&ndash;&gt;-->
+            <!--</systemPropertyVariables>-->
+            <!--<redirectTestOutputToFile>false</redirectTestOutputToFile>-->
+            <!--</configuration>-->
+            <!--</plugin>-->
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>arquillian-wildfly-managed</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <configuration>
+                            <includes>
+                                <include>**/*Test.java</include>
+                                <include>**/*IT.java</include>
+                            </includes>
+                            <systemPropertyVariables>
+                                <jboss.home>${jboss-as.home}</jboss.home>
+                                <!--<arquillian.launch>wildfly-managed</arquillian.launch>-->
+                            </systemPropertyVariables>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+            <dependencies>
+                <dependency>
+                    <groupId>org.wildfly.arquillian</groupId>
+                    <artifactId>wildfly-arquillian-container-managed</artifactId>
+                    <version>${wildfly.arquillian.version}</version>
+                    <scope>test</scope>
+                </dependency>
+            </dependencies>
+        </profile>
+
+        <profile>
+            <id>arquillian-wildfly-remote</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <configuration>
+                            <includes>
+                                <include>**/*Test.java</include>
+                                <include>**/*IT.java</include>
+                            </includes>
+                            <systemPropertyVariables>
+                                <!--<arquillian.launch>wildfly-remote</arquillian.launch>-->
+                            </systemPropertyVariables>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+            <dependencies>
+                <dependency>
+                    <groupId>org.wildfly.arquillian</groupId>
+                    <artifactId>wildfly-arquillian-container-remote</artifactId>
+                    <version>${wildfly.arquillian.version}</version>
+                    <scope>test</scope>
+                </dependency>
+            </dependencies>
+            <properties>
+                <remote.test.server>localhost</remote.test.server>
+                <remote.test.port>9990</remote.test.port>
+                <remote.test.user>admin</remote.test.user>
+                <remote.test.password>almafa</remote.test.password>
+            </properties>
+        </profile>
+    </profiles>
 </project>

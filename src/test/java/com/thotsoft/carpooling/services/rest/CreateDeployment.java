@@ -11,9 +11,9 @@ import java.io.File;
 
 import static org.jboss.shrinkwrap.resolver.api.maven.coordinate.MavenDependencies.createDependency;
 
-class CreateDeployment {
+public class CreateDeployment {
 
-    static WebArchive createDeployment() {
+    public static WebArchive createDeployment() {
         JavaArchive contentModelJar = ShrinkWrap.create(JavaArchive.class)
                 .addPackages(true, "com.thotsoft.carpooling")
                 .addAsResource("META-INF/persistence.xml")
@@ -25,7 +25,8 @@ class CreateDeployment {
         return ShrinkWrap.create(WebArchive.class, "carpooling.war")
                 .addAsLibraries(mavenDependencies())
                 .addAsWebInfResource(new File("src/main/webapp/WEB-INF", "jboss-web.xml"))
-                .addAsWebInfResource(new File("src/main/webapp/WEB-INF", "web.xml"));
+                .addAsWebInfResource(new File("src/main/webapp/WEB-INF", "web.xml"))
+                .addAsWebInfResource(new File("src/main/webapp/WEB-INF", "keycloak.json"));
     }
 
     private static File[] mavenDependencies() {

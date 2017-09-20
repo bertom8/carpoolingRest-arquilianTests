@@ -8,14 +8,14 @@ import javax.ws.rs.core.MediaType;
 import java.util.List;
 
 @Path("/ad")
+@Consumes(MediaType.APPLICATION_JSON)
+@Produces(MediaType.APPLICATION_JSON)
 public interface AdRest {
     @PUT
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
     int addAdvertisement(Advertisement advertisement);
 
     @DELETE
-    @Path("/{id}")
+    @Path("/id")
     @Produces(MediaType.APPLICATION_JSON)
     boolean removeAdvertisement(@PathParam("id") int id);
 
@@ -25,12 +25,12 @@ public interface AdRest {
     boolean removeAdvertisement(Advertisement advertisement);
 
     @GET
-    @Path("/{id}")
+    @Path("/id")
     @Produces(MediaType.APPLICATION_JSON)
     Advertisement getAdvertisement(@PathParam("id") int id);
 
     @POST
-    @Path("/{id}")
+    @Path("/id")
     @Consumes(MediaType.APPLICATION_JSON)
     void updateAdvertisement(@PathParam("id") int id, Advertisement advertisement);
 

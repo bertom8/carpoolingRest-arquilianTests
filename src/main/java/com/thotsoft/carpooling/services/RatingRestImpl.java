@@ -21,7 +21,7 @@ public class RatingRestImpl implements RatingRest {
     private static Logger logger = LoggerFactory.getLogger(RatingRestImpl.class);
 
     @Context
-    HttpServletRequest request;
+    private HttpServletRequest request;
 
     @PersistenceContext
     private EntityManager em;

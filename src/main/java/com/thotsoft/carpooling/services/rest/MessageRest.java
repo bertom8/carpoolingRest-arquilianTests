@@ -15,9 +15,9 @@ public interface MessageRest {
     int addMessage(Message message);
 
     @DELETE
-    @Path("/{id}")
+    @Path("/{" + Message.FIELD_ID + "}")
     @Produces(MediaType.APPLICATION_JSON)
-    boolean removeMessage(@PathParam("id") int id);
+    boolean removeMessage(@PathParam(Message.FIELD_ID) int id);
 
     @DELETE
     @Consumes(MediaType.APPLICATION_JSON)
@@ -25,14 +25,14 @@ public interface MessageRest {
     boolean removeMessage(Message message);
 
     @GET
-    @Path("/{id}")
+    @Path("/{" + Message.FIELD_ID + "}")
     @Produces(MediaType.APPLICATION_JSON)
-    Message getMessage(@PathParam("id") int id);
+    Message getMessage(@PathParam(Message.FIELD_ID) int id);
 
     @POST
-    @Path("/{id}")
+    @Path("/{" + Message.FIELD_ID + "}")
     @Consumes(MediaType.APPLICATION_JSON)
-    void updateUser(@PathParam("id") int id, Message message);
+    void updateUser(@PathParam(Message.FIELD_ID) int id, Message message);
 
     @GET
     @Path("/list")

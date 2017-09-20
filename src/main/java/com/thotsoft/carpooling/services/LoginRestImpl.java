@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.Context;
 import java.io.UnsupportedEncodingException;
@@ -20,7 +21,7 @@ public class LoginRestImpl implements LoginRest {
     private static final Logger logger = LoggerFactory.getLogger(LoginRestImpl.class);
 
     @Context
-    HttpServletRequest request;
+    private HttpServletRequest request;
 
     @Inject
     private UserRest userRest;
@@ -75,7 +76,8 @@ public class LoginRestImpl implements LoginRest {
      * Log out the user in session
      */
     @Override
-    public void logout() {
+    public void logout() throws ServletException {
+        request.logout();
         request.getSession().removeAttribute("user");
     }
 }

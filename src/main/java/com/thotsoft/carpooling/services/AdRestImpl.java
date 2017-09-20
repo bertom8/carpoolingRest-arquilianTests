@@ -4,9 +4,15 @@ import com.thotsoft.carpooling.model.Advertisement;
 import com.thotsoft.carpooling.model.User;
 import com.thotsoft.carpooling.model.Vehicle;
 import com.thotsoft.carpooling.services.rest.AdRest;
+import org.keycloak.KeycloakSecurityContext;
+import org.keycloak.representations.AccessToken;
+import org.keycloak.representations.IDToken;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Resource;
+import javax.annotation.security.RolesAllowed;
+import javax.ejb.SessionContext;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -15,32 +21,46 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.SecurityContext;
 import java.util.List;
 import java.util.Objects;
 
 @Stateless
+//@SecurityDomain("keycloak")
 public class AdRestImpl implements AdRest {
     private static Logger logger = LoggerFactory.getLogger(AdRestImpl.class);
 
-    @Context
-    HttpServletRequest request;
-
     @PersistenceContext
     private EntityManager em;
+
+    @Resource
+    private SessionContext sc;
+
+    @Context
+    private HttpServletRequest request;
+    @Context
+    private SecurityContext securityContext;
 
     /**
      * @param advertisement Advertisement object to insert to DB
      * @return Id of Advertisement
      */
     @Override
+    @RolesAllowed({"user", "admin"})
     public int addAdvertisement(Advertisement advertisement) {
-        User loggedUser = ((User) request.getSession().getAttribute("user"));
-        if (loggedUser == null) {
-            throw new IllegalArgumentException("No user logged in!");
-        }
-        advertisement.setUser(em.find(User.class, advertisement.getUser().getId()));
-        advertisement.setVehicle(em.find(Vehicle.class, advertisement.getVehicle().getLicenceNumber()));
+//        User loggedUser = ((User) request.getSession().getAttribute("user"));
+//        if (loggedUser == null) {
+//            throw new IllegalArgumentException("No user logged in!");
+//        }
+        KeycloakSecurityContext session = (KeycloakSecurityContext) request.getAttribute(
+                KeycloakSecurityContext.class.getName());
+        AccessToken token = session.getToken();
+        IDToken idToken = session.getIdToken();
         Objects.requireNonNull(advertisement);
+        advertisement.setUser(em.find(User.class, token.getOtherClaims().get("id")));
+        if (advertisement.getVehicle() != null) {
+            advertisement.setVehicle(em.find(Vehicle.class, advertisement.getVehicle().getLicenceNumber()));
+        }
         em.persist(advertisement);
         em.flush();
         logger.info("Advertisement added: {}", advertisement);
@@ -53,6 +73,8 @@ public class AdRestImpl implements AdRest {
      */
     @Override
     public boolean removeAdvertisement(int id) {
+
+
         User loggedUser = ((User) request.getSession().getAttribute("user"));
         if (loggedUser == null) {
             throw new IllegalArgumentException("No user logged in!");

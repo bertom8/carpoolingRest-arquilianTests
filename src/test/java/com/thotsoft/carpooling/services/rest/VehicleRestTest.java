@@ -80,9 +80,12 @@ public class VehicleRestTest {
         UserRestTest.userList.add(admin);
 
         //Login with admin
-        Response login = webTarget.path("/login/" + admin.getEmail() + "/" + admin.getPassword())
+        Response login = webTarget.path("/login/")
+                .queryParam("email", admin.getEmail())
+                .queryParam("pass", admin.getPassword())
                 .request(MediaType.APPLICATION_JSON_TYPE)
-                .get();
+                .build("POST")
+                .invoke();
         Cookie jSessionId = login.getCookies().get("JSESSIONID");
         login.close();
 
@@ -143,9 +146,12 @@ public class VehicleRestTest {
         UserRestTest.userList.add(admin);
 
         //Login with admin
-        Response login = webTarget.path("/login/" + admin.getEmail() + "/" + admin.getPassword())
+        Response login = webTarget.path("/login/")
+                .queryParam("email", admin.getEmail())
+                .queryParam("pass", admin.getPassword())
                 .request(MediaType.APPLICATION_JSON_TYPE)
-                .get();
+                .build("POST")
+                .invoke();
         Cookie jSessionId = login.getCookies().get("JSESSIONID");
         login.close();
 

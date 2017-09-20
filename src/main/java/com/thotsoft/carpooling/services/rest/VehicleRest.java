@@ -14,9 +14,9 @@ public interface VehicleRest {
     String addVehicle(Vehicle vehicle);
 
     @DELETE
-    @Path("/{licenceNumber}")
+    @Path("/{" + Vehicle.FIELD_LICENCE_NUMBER + "}")
     @Produces(MediaType.APPLICATION_JSON)
-    boolean removeVehicle(@PathParam("licenceNumber") String licenceNumber);
+    boolean removeVehicle(@PathParam(Vehicle.FIELD_LICENCE_NUMBER) String licenceNumber);
 
     @DELETE
     @Consumes(MediaType.APPLICATION_JSON)
@@ -24,14 +24,14 @@ public interface VehicleRest {
     boolean removeVehicle(Vehicle vehicle);
 
     @GET
-    @Path("/{licenceNumber}")
+    @Path("/{" + Vehicle.FIELD_LICENCE_NUMBER + "}")
     @Produces(MediaType.APPLICATION_JSON)
-    Vehicle getVehicle(@PathParam("licenceNumber") String licenceNumber);
+    Vehicle getVehicle(@PathParam(Vehicle.FIELD_LICENCE_NUMBER) String licenceNumber);
 
     @POST
-    @Path("/{licenceNumber}")
+    @Path("/{" + Vehicle.FIELD_LICENCE_NUMBER + "}")
     @Consumes(MediaType.APPLICATION_JSON)
-    void updateVehicle(@PathParam("licenceNumber") String licenceNumber, Vehicle vehicle);
+    void updateVehicle(@PathParam(Vehicle.FIELD_LICENCE_NUMBER) String licenceNumber, Vehicle vehicle);
 
     @GET
     @Path("/list")

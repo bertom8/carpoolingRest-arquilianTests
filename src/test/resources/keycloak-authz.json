@@ -1,0 +1,11 @@
+{
+  "realm": "master",
+  "auth-server-url": "http://localhost:8081/auth",
+  "ssl-required": "none",
+  "resource": "test-authz-service",
+  "credentials": {
+    "secret": "1e6b7e35-05f3-482f-9e91-0872880c8835"
+  },
+  "use-resource-role-mappings": true,
+  "policy-enforcer": {}
+}

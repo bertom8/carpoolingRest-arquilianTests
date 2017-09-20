@@ -15,9 +15,9 @@ public interface UserRest {
     int addUser(User user);
 
     @DELETE
-    @Path("/{id}")
+    @Path("/{" + User.FIELD_ID + "}")
     @Produces(MediaType.APPLICATION_JSON)
-    boolean removeUser(@PathParam("id") int id);
+    boolean removeUser(@PathParam(User.FIELD_ID) int id);
 
     @DELETE
     @Consumes(MediaType.APPLICATION_JSON)
@@ -25,14 +25,14 @@ public interface UserRest {
     boolean removeUser(User user);
 
     @GET
-    @Path("/{id}")
+    @Path("/{" + User.FIELD_ID + "}")
     @Produces(MediaType.APPLICATION_JSON)
-    User getUser(@PathParam("id") int id);
+    User getUser(@PathParam(User.FIELD_ID) int id);
 
     @POST
-    @Path("/{id}")
+    @Path("/{" + User.FIELD_ID + "}")
     @Consumes(MediaType.APPLICATION_JSON)
-    void updateUser(@PathParam("id") int id, User user);
+    void updateUser(@PathParam(User.FIELD_ID) int id, User user);
 
     @GET
     @Path("/list")

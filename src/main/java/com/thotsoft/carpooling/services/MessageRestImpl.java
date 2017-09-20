@@ -20,8 +20,10 @@ import java.util.Objects;
 @Stateless
 public class MessageRestImpl implements MessageRest {
     private static Logger logger = LoggerFactory.getLogger(MessageRestImpl.class);
+
     @Context
-    HttpServletRequest request;
+    private HttpServletRequest request;
+
     @PersistenceContext
     private EntityManager em;
 

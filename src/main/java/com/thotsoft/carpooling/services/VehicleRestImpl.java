@@ -19,7 +19,7 @@ public class VehicleRestImpl implements VehicleRest {
     private static Logger logger = LoggerFactory.getLogger(VehicleRestImpl.class);
 
     @Context
-    HttpServletRequest request;
+    private HttpServletRequest request;
 
     @PersistenceContext
     private EntityManager em;

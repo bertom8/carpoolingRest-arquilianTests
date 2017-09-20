@@ -23,7 +23,7 @@ public class UserRestImpl implements UserRest {
     private static final Logger logger = LoggerFactory.getLogger(UserRestImpl.class);
 
     @Context
-    HttpServletRequest request;
+    private HttpServletRequest request;
 
     @PersistenceContext
     private EntityManager em;
@@ -82,7 +82,7 @@ public class UserRestImpl implements UserRest {
             logger.info("User was removed with this id: {}", user.getId());
             return true;
         } else {
-            throw new IllegalArgumentException("User was null");
+            throw new IllegalArgumentException("User was null or not admin");
         }
     }
 

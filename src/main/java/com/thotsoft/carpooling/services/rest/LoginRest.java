@@ -1,16 +1,16 @@
 package com.thotsoft.carpooling.services.rest;
 
+import javax.servlet.ServletException;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 
 @Path("/login")
 public interface LoginRest {
 
-    @GET
-    @Path("/{email}/{pass}")
+    @POST
     @Produces(MediaType.APPLICATION_JSON)
-    boolean login(@PathParam("email") String email, @PathParam("pass") String password);
+    boolean login(@QueryParam("email") String email, @QueryParam("pass") String password);
 
     @DELETE
-    void logout();
+    void logout() throws ServletException;
 }
