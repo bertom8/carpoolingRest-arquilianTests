@@ -6,7 +6,6 @@ import com.thotsoft.carpooling.model.Vehicle;
 import com.thotsoft.carpooling.services.rest.AdRest;
 import org.keycloak.KeycloakSecurityContext;
 import org.keycloak.representations.AccessToken;
-import org.keycloak.representations.IDToken;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -55,7 +54,6 @@ public class AdRestImpl implements AdRest {
         KeycloakSecurityContext session = (KeycloakSecurityContext) request.getAttribute(
                 KeycloakSecurityContext.class.getName());
         AccessToken token = session.getToken();
-        IDToken idToken = session.getIdToken();
         Objects.requireNonNull(advertisement);
         advertisement.setUser(em.find(User.class, token.getOtherClaims().get("id")));
         if (advertisement.getVehicle() != null) {
