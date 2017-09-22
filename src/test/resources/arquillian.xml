@@ -5,15 +5,15 @@
 
     <defaultProtocol type="Servlet 3.0"/>
 
-    <!--<container qualifier="wildfly-managed" default="false">-->
-    <!--<configuration>-->
-    <!--<property name="jbossHome">${jboss-as.home}</property>-->
-    <!--<property name="javaVmArguments">-->
-    <!-- -Xms1024M -Xmx1024M -XX:MaxMetaspaceSize=512M-->
-    <!-- -agentlib:jdwp=transport=dt_socket,address=8787,server=y,suspend=n-->
-    <!--</property>-->
-    <!--</configuration>-->
-    <!--</container>-->
+    <container qualifier="wildfly-managed" default="false">
+        <configuration>
+            <property name="jbossHome">${jboss-as.home}</property>
+            <property name="javaVmArguments">
+                -Xms1024M -Xmx1024M -XX:MaxMetaspaceSize=512M
+                -agentlib:jdwp=transport=dt_socket,address=8787,server=y,suspend=n
+            </property>
+        </configuration>
+    </container>
 
     <container qualifier="wildfly-remote" default="true">
         <configuration>

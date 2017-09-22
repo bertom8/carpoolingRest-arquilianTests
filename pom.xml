@@ -120,7 +120,7 @@
             <artifactId>slf4j-api</artifactId>
             <version>1.7.25</version>
         </dependency>
-        
+
         <dependency>
             <groupId>org.keycloak</groupId>
             <artifactId>keycloak-core</artifactId>
@@ -183,8 +183,7 @@
                                 <include>**/*IT.java</include>
                             </includes>
                             <systemPropertyVariables>
-                                <jboss.home>${jboss-as.home}</jboss.home>
-                                <!--<arquillian.launch>wildfly-managed</arquillian.launch>-->
+                                <arquillian.launch>wildfly-managed</arquillian.launch>
                             </systemPropertyVariables>
                         </configuration>
                     </plugin>
